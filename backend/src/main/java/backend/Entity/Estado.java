@@ -1,6 +1,5 @@
 package backend.Entity;
 
-public enum Estado
-{
-    Pendiente,Pagada
+public enum Estado {
+    Pendiente, Pagada
 }

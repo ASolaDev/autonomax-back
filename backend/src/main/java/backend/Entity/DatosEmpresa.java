@@ -13,28 +13,22 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "datos_empresa")
-public class DatosEmpresa
-{
+public class DatosEmpresa {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
-    @Column(name = "nombre_empresa", length = 100,nullable = false)
+    @Column(name = "nombre_empresa", length = 100, nullable = false)
     private String nombre_empresa;
 
-
-    @Column(name = "cif_empresa", length = 20,nullable = false)
+    @Column(name = "cif_empresa", length = 20, nullable = false)
     private String cif_empresa;
 
-
-    @Column(name = "direccion_empresa",nullable = false)
+    @Column(name = "direccion_empresa", nullable = false)
     private String direccion_empresa;
 
-
-    @Column(name = "email_empresa",length = 100,nullable = false)
+    @Column(name = "email_empresa", length = 100, nullable = false)
     private String email_empresa;
-
 
     @Column(name = "telefono_empresa", length = 20, nullable = false)
     private String telefono_empresa;

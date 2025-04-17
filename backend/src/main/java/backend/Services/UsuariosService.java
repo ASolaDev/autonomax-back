@@ -1,56 +1,43 @@
 package backend.Services;
 
-import backend.Entity.Usuarios;
-import backend.Repository.UsuariosRepository;
-import jakarta.persistence.EntityNotFoundException;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import backend.Entity.Usuarios;
+import backend.Repository.UsuariosRepository;
+import jakarta.persistence.EntityNotFoundException;
 
 @Service
-public class UsuariosService
-{
+public class UsuariosService {
     @Autowired
     private UsuariosRepository usuariosRepository;
-
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-
     // Obtener todos los usuarios
-    public List<Usuarios> obtenerTodosLosUsuarios()
-    {
+    public List<Usuarios> obtenerTodosLosUsuarios() {
         return this.usuariosRepository.findAll();
     }
 
-
     // Obtener un usuario por su ID
-    public Usuarios obtenerUsuarioPorID(Long id)
-    {
+    public Usuarios obtenerUsuarioPorID(Long id) {
         return this.usuariosRepository.findById(id).orElse(null);
     }
 
-
     // Actualizar un usuario
-    public ResponseEntity<?> ActualizarUsuario(Long id, Usuarios usuario)
-    {
+    public ResponseEntity<?> ActualizarUsuario(Long id, Usuarios usuario) {
         Usuarios usu_encontrado = obtenerUsuarioPorID(id);
 
-        if(usu_encontrado != null)
-        {
-            ResponseEntity<?> validacionResultado = ValidarUsuario(usuario,true,id);
-            if (validacionResultado != null)
-            {
+        if (usu_encontrado != null) {
+            ResponseEntity<?> validacionResultado = ValidarUsuario(usuario, true, id);
+            if (validacionResultado != null) {
                 return validacionResultado;
             }
 
@@ -59,24 +46,20 @@ public class UsuariosService
             usu_encontrado.setPassword(hashearContraseña(usuario.getPassword()));
             usu_encontrado.setRol(usuario.getRol());
 
-
             Usuarios usuarioGuardado = usuariosRepository.save(usu_encontrado);
 
             return ResponseEntity.status(HttpStatus.CREATED).body("Usuario actualizado!");
-        }
-        else
+        } else
             return null;
     }
 
-
     // Crear un nuevo usuario
-    public ResponseEntity<?> crearUsuario(Usuarios usuario)
-    {
-        // Para posteriores mejoras, creamos validaciones de nombre y contraseñas con REGEX
+    public ResponseEntity<?> crearUsuario(Usuarios usuario) {
+        // Para posteriores mejoras, creamos validaciones de nombre y contraseñas con
+        // REGEX
 
-        ResponseEntity<?> validacionResultado = ValidarUsuario(usuario,false,null);
-        if (validacionResultado != null)
-        {
+        ResponseEntity<?> validacionResultado = ValidarUsuario(usuario, false, null);
+        if (validacionResultado != null) {
             return validacionResultado;
         }
 
@@ -86,45 +69,33 @@ public class UsuariosService
 
         return ResponseEntity.status(HttpStatus.CREATED).body("Usuario creado");
 
-
-
     }
 
     // Borrar un usuario
-    public void EliminarUsuario(Long id)
-    {
+    public void EliminarUsuario(Long id) {
         Usuarios usuario_encontrado = obtenerUsuarioPorID(id);
 
-        if (usuario_encontrado != null)
-        {
+        if (usuario_encontrado != null) {
             usuariosRepository.delete(usuario_encontrado);
-        } else
-        {
+        } else {
             throw new EntityNotFoundException("Usuario no encontrado para eliminar");
         }
     }
 
-
-    public ResponseEntity<?> Login (String email, String contraseña)
-    {
+    public ResponseEntity<?> Login(String email, String contraseña) {
         Usuarios usu_encontrado = usuariosRepository.ComprobarUsuarioPorEmail(email);
 
-        if(usu_encontrado != null)
-        {
-             // Comprobamos la contraseña hasheada con plana (la que mete el usuario)
+        if (usu_encontrado != null) {
+            // Comprobamos la contraseña hasheada con plana (la que mete el usuario)
             BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-            if (encoder.matches(contraseña.trim(), usu_encontrado.getPassword()))
-            {
+            if (encoder.matches(contraseña.trim(), usu_encontrado.getPassword())) {
                 return new ResponseEntity<>(usu_encontrado, HttpStatus.OK);
-            }
-            else
+            } else
                 return ResponseEntity.status(401).body("Contraseña no coincide.");
-        }
-        else
+        } else
             return ResponseEntity.status(401).body("Email no coincide, Usuario no encontrado.");
     }
-
 
     // Método para validar el formato del email
     private boolean esEmailValido(String email) {
@@ -133,10 +104,8 @@ public class UsuariosService
     }
 
     // Método para comprobar si el email ya está registrado
-    private boolean comprobarEmail(String email, boolean usuario_editar, Long id)
-    {
-        if (usuario_editar)
-        {
+    private boolean comprobarEmail(String email, boolean usuario_editar, Long id) {
+        if (usuario_editar) {
             Usuarios usuarioExistente = usuariosRepository.ComprobarUsuarioPorEmail(email);
             return (usuarioExistente != null && !usuarioExistente.getId().equals(id));
         }
@@ -144,57 +113,42 @@ public class UsuariosService
         return usuariosRepository.ComprobarUsuarioPorEmail(email) != null;
     }
 
-
-    // Metodo para validar al Usuario (sea si se ha encontrado o no, para no repetir código en put/post
-    private ResponseEntity<?>ValidarUsuario(Usuarios usuario, boolean usuario_editar,Long id)
-    {
-        if(usuario.getNombre_usuario().trim().length() < 3)
-        {
+    // Metodo para validar al Usuario (sea si se ha encontrado o no, para no repetir
+    // código en put/post
+    private ResponseEntity<?> ValidarUsuario(Usuarios usuario, boolean usuario_editar, Long id) {
+        if (usuario.getNombre_usuario().trim().length() < 3) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body("El nombre no cumple con la longitud suficiente (minimo 3)");
         }
 
-        if(usuario.getPassword().trim().length() < 3)
-        {
+        if (usuario.getPassword().trim().length() < 3) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body("La contraseña no cumple con la longitud suficiente (minimo 3)");
         }
-
 
         if (!esEmailValido(usuario.getEmail())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body("El formato del email no es válido.");
         }
 
-        if (comprobarEmail(usuario.getEmail(),usuario_editar,id)) {
+        if (comprobarEmail(usuario.getEmail(), usuario_editar, id)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body("El email ya está registrado.");
         }
 
-
-       return null;
+        return null;
     }
 
-
     // Metodo para hashear la contraseña en BD
-    public String hashearContraseña(String clave)
-    {
-        if(!clave.isEmpty())
-        {
+    public String hashearContraseña(String clave) {
+        if (!clave.isEmpty()) {
             BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
             return encoder.encode(clave);
 
-
-        }
-        else
-        {
+        } else {
             return clave;
         }
 
-
     }
-
-
-
 
 }

@@ -1,6 +1,5 @@
 package backend.Entity;
 
-public enum Rol
-{
+public enum Rol {
     Administrador, Usuario, Desarollo
 }
