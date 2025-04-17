@@ -33,20 +33,20 @@ public class UsuariosService {
 
     // Actualizar un usuario
     public ResponseEntity<?> ActualizarUsuario(Long id, Usuarios usuario) {
-        Usuarios usu_encontrado = obtenerUsuarioPorID(id);
+        Usuarios usuEncontrado = obtenerUsuarioPorID(id);
 
-        if (usu_encontrado != null) {
+        if (usuEncontrado != null) {
             ResponseEntity<?> validacionResultado = ValidarUsuario(usuario, true, id);
             if (validacionResultado != null) {
                 return validacionResultado;
             }
 
-            usu_encontrado.setNombre_usuario(usuario.getNombre_usuario());
-            usu_encontrado.setEmail(usuario.getEmail());
-            usu_encontrado.setPassword(hashearContraseña(usuario.getPassword()));
-            usu_encontrado.setRol(usuario.getRol());
+            usuEncontrado.setNombre_usuario(usuario.getNombre_usuario());
+            usuEncontrado.setEmail(usuario.getEmail());
+            usuEncontrado.setPassword(hashearContraseña(usuario.getPassword()));
+            usuEncontrado.setRol(usuario.getRol());
 
-            Usuarios usuarioGuardado = usuariosRepository.save(usu_encontrado);
+            Usuarios usuarioGuardado = usuariosRepository.save(usuEncontrado);
 
             return ResponseEntity.status(HttpStatus.CREATED).body("Usuario actualizado!");
         } else
@@ -83,14 +83,14 @@ public class UsuariosService {
     }
 
     public ResponseEntity<?> Login(String email, String contraseña) {
-        Usuarios usu_encontrado = usuariosRepository.ComprobarUsuarioPorEmail(email);
+        Usuarios usuEncontrado = usuariosRepository.ComprobarUsuarioPorEmail(email);
 
-        if (usu_encontrado != null) {
+        if (usuEncontrado != null) {
             // Comprobamos la contraseña hasheada con plana (la que mete el usuario)
             BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-            if (encoder.matches(contraseña.trim(), usu_encontrado.getPassword())) {
-                return new ResponseEntity<>(usu_encontrado, HttpStatus.OK);
+            if (encoder.matches(contraseña.trim(), usuEncontrado.getPassword())) {
+                return new ResponseEntity<>(usuEncontrado, HttpStatus.OK);
             } else
                 return ResponseEntity.status(401).body("Contraseña no coincide.");
         } else
@@ -144,11 +144,9 @@ public class UsuariosService {
         if (!clave.isEmpty()) {
             BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
             return encoder.encode(clave);
-
         } else {
             return clave;
         }
-
     }
 
 }
