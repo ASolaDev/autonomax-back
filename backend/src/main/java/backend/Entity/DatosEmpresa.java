@@ -1,5 +1,6 @@
 package backend.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -34,5 +35,6 @@ public class DatosEmpresa {
     private String telefono_empresa;
 
     @OneToMany(mappedBy = "empresa", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Facturas> facturas = new ArrayList<>();
 }
