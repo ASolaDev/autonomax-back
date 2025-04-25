@@ -12,37 +12,31 @@ import java.util.Arrays;
 import java.util.List;
 
 @Service
-public class ClientesServices
-{
+public class ClientesServices {
     @Autowired
     private ClientesRepository clientesRepository;
 
-
-
-
     // Obtener todos los clientes
-    public List<Clientes> obtenerTodos()
-    {
+    public List<Clientes> obtenerTodos() {
         return clientesRepository.findAll();
     }
 
-
     // Devolver un cliente dado su id
-    public Clientes obtenerPorId(Long id)
-    {
+    public Clientes obtenerPorId(Long id) {
         return clientesRepository.findById(id).orElse(null);
     }
 
-
     // Eliminar a un cliente
-    public void eliminarCliente(Long id)
-    {
+    public void eliminarCliente(Long id) {
         Clientes clienteEncontrado = obtenerPorId(id);
 
-        if(clienteEncontrado != null)
+        if (clienteEncontrado != null)
             clientesRepository.delete(clienteEncontrado);
     }
 
+    // Actualizar a un cliente
+    public ResponseEntity<?> actualizarCliente(Clientes cliente, Long id) {
+        Clientes clienteEncontrado = obtenerPorId(id);
 
     //Actualizar a un cliente
     public ResponseEntity<?> actualizarCliente(Clientes cliente, Long id)
@@ -63,7 +57,7 @@ public class ClientesServices
             clienteEncontrado.setTelefono_cliente(cliente.getTelefono_cliente());
             clienteEncontrado.setFacturas(cliente.getFacturas());
 
-             clientesRepository.save(clienteEncontrado);
+            clientesRepository.save(clienteEncontrado);
             return ResponseEntity.ok(clienteEncontrado);
 
 

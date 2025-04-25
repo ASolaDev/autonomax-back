@@ -7,8 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface UsuariosRepository extends JpaRepository<Usuarios,Long>
-{
+public interface UsuariosRepository extends JpaRepository<Usuarios, Long> {
     @Query("FROM Usuarios u WHERE u.email = :email")
     Usuarios ComprobarUsuarioPorEmail(@Param("email") String email);
 }

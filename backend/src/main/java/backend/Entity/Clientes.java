@@ -9,8 +9,6 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Data
@@ -25,7 +23,7 @@ public class Clientes {
     @Column(name = "nombre_cliente", length = 100, nullable = false)
     private String nombre_cliente;
 
-    @Column(name = "cif_cliente", length = 20, nullable = false,unique = true)
+    @Column(name = "cif_cliente", length = 20, nullable = false, unique = true)
     private String cif_cliente;
 
     @Column(name = "direccion_cliente", nullable = false)
@@ -39,7 +37,5 @@ public class Clientes {
 
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Facturas> facturas = new ArrayList<>();
-
-
 
 }
