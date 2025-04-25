@@ -1,12 +1,14 @@
 package backend.Services;
 
 import backend.Entity.Clientes;
+import backend.Entity.Usuarios;
 import backend.Repository.ClientesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -49,6 +51,11 @@ public class ClientesServices
 
         if(clienteEncontrado != null)
         {
+            if(!esEmailValido(cliente.getEmail_cliente()))
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El formato del email no es válido");
+
+
+
             clienteEncontrado.setCif_cliente(cliente.getCif_cliente());
             clienteEncontrado.setNombre_cliente(cliente.getNombre_cliente());
             clienteEncontrado.setDireccion_cliente(cliente.getDireccion_cliente());
@@ -62,7 +69,7 @@ public class ClientesServices
 
         }
         else
-              return ResponseEntity.status(409).body("Cliente no actualizado, revise los datos de nuevo");
+              return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Cliente no actualizado, revise los datos de nuevo");
 
     }
 
@@ -70,16 +77,37 @@ public class ClientesServices
     //Crear a un cliente
     public ResponseEntity<?> crearCliente(Clientes cliente)
     {
-        Clientes clienteEncontrado = clientesRepository.ComprobarUsuarioPorEmail(cliente.getEmail_cliente());
+        Clientes clienteEncontrado = clientesRepository.ComprobarClientePorCIF(cliente.getCif_cliente());
 
         if(clienteEncontrado == null)
         {
+            if(!esEmailValido(cliente.getEmail_cliente()))
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El formato del email no es válido");
+
+
             clientesRepository.save(cliente);
-            return ResponseEntity.status(HttpStatus.CREATED).body("Usuario creado con éxito!");
+            return ResponseEntity.status(HttpStatus.CREATED).body("Cliente creado con éxito!");
         }
 
         else
             return ResponseEntity.status(409).body("El cliente ya existe");
 
+    }
+
+
+
+    private boolean esEmailValido(String email) {
+        String EMAIL_REGEX = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
+        return email.matches(EMAIL_REGEX);
+    }
+
+    // Método para comprobar si el CIF ya está registrado
+    private boolean comprobarEmail(String cif, boolean usuario_editar, Long id) {
+        if (usuario_editar) {
+            Clientes clienteExistente = clientesRepository.ComprobarClientePorCIF(cif);
+            return (clienteExistente != null && !clienteExistente.getId().equals(id));
+        }
+
+        return clientesRepository.ComprobarClientePorCIF(cif) != null;
     }
 }
