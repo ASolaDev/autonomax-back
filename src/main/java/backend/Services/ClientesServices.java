@@ -38,17 +38,9 @@ public class ClientesServices {
     public ResponseEntity<?> actualizarCliente(Clientes cliente, Long id) {
         Clientes clienteEncontrado = obtenerPorId(id);
 
-    //Actualizar a un cliente
-    public ResponseEntity<?> actualizarCliente(Clientes cliente, Long id)
-    {
-        Clientes clienteEncontrado =  obtenerPorId(id);
-
-        if(clienteEncontrado != null)
-        {
-            if(!esEmailValido(cliente.getEmail_cliente()))
+        if (clienteEncontrado != null) {
+            if (!esEmailValido(cliente.getEmail_cliente()))
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El formato del email no es válido");
-
-
 
             clienteEncontrado.setCif_cliente(cliente.getCif_cliente());
             clienteEncontrado.setNombre_cliente(cliente.getNombre_cliente());
@@ -60,24 +52,19 @@ public class ClientesServices {
             clientesRepository.save(clienteEncontrado);
             return ResponseEntity.ok(clienteEncontrado);
 
-
-        }
-        else
-              return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Cliente no actualizado, revise los datos de nuevo");
+        } else
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Cliente no actualizado, revise los datos de nuevo");
 
     }
 
-
-    //Crear a un cliente
-    public ResponseEntity<?> crearCliente(Clientes cliente)
-    {
+    // Crear a un cliente
+    public ResponseEntity<?> crearCliente(Clientes cliente) {
         Clientes clienteEncontrado = clientesRepository.ComprobarClientePorCIF(cliente.getCif_cliente());
 
-        if(clienteEncontrado == null)
-        {
-            if(!esEmailValido(cliente.getEmail_cliente()))
+        if (clienteEncontrado == null) {
+            if (!esEmailValido(cliente.getEmail_cliente()))
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El formato del email no es válido");
-
 
             clientesRepository.save(cliente);
             return ResponseEntity.status(HttpStatus.CREATED).body("Cliente creado con éxito!");
@@ -87,8 +74,6 @@ public class ClientesServices {
             return ResponseEntity.status(409).body("El cliente ya existe");
 
     }
-
-
 
     private boolean esEmailValido(String email) {
         String EMAIL_REGEX = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
