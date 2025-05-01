@@ -1,68 +1,68 @@
 # Repositorio Backend
 # API 
-# OpenAPI definition
-## Version: v0
+# Definición OpenAPI
+## Versión: v0
 
 ### /autonomax/usuario/{id}
 
 #### GET
-##### Summary:
+##### Sumario:
 
 Obtener un usuario
 
-##### Description:
+##### Descripción:
 
-Dado un id, devuelve un el usuario, en caso contrario no devuelve nada
+Dado un ID devuelve un usuario, en caso contrario no devuelve nada.
 
-##### Parameters
+##### Parámetros
 
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ---- |
 | id | path |  | Yes | long |
 
-##### Responses
+##### Respuestas
 
 | Code | Description |
 | ---- | ----------- |
 | 200 | OK |
 
 #### PUT
-##### Summary:
+##### Sumario:
 
 Actualizar un usuario
 
-##### Description:
+##### Descripción:
 
-Actualiza al usuario mediante un id y un objeto Usuario (obligatorio esto para actualizar)
+Actualiza el usuario mediante un ID y un objeto Usuario (obligatorio esto para actualizar).
 
-##### Parameters
+##### Parámetros
 
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ---- |
 | id | path |  | Yes | long |
 
-##### Responses
+##### Respuestas
 
 | Code | Description |
 | ---- | ----------- |
 | 200 | OK |
 
 #### DELETE
-##### Summary:
+##### Sumario:
 
 Eliminar un usuario
 
-##### Description:
+##### Descripción:
 
-Elimina al usuario de la base de datos, si no lo encuentra no hace nada
+Elimina un usuario de la base de datos. Si no lo encuentra, no hace nada.
 
-##### Parameters
+##### Parámetros
 
 | Name | Located in | Description | Required | Schema |
 | ---- | ---------- | ----------- | -------- | ---- |
 | id | path |  | Yes | long |
 
-##### Responses
+##### Respuestas
 
 | Code | Description |
 | ---- | ----------- |
@@ -71,15 +71,15 @@ Elimina al usuario de la base de datos, si no lo encuentra no hace nada
 ### /autonomax/nuevo_usuario
 
 #### POST
-##### Summary:
+##### Sumario:
 
 Registrar un nuevo usuario
 
-##### Description:
+##### Descripción
 
 Crea un nuevo usuario validando el email, el nombre y la contraseña. Devuelve el usuario creado si todo es correcto.
 
-##### Responses
+##### Respuesta
 
 | Code | Description |
 | ---- | ----------- |
@@ -88,15 +88,15 @@ Crea un nuevo usuario validando el email, el nombre y la contraseña. Devuelve e
 ### /autonomax/login
 
 #### POST
-##### Summary:
+##### Sumario:
 
 Loguear un usuario
 
-##### Description:
+##### Descripción:
 
-A partir de un email y una contraseña devuelve una respuesta afirmativa o negativa
+A partir de un email y una contraseña, devuelve una respuesta afirmativa o negativa
 
-##### Responses
+##### Respuesta
 
 | Code | Description |
 | ---- | ----------- |
@@ -105,15 +105,15 @@ A partir de un email y una contraseña devuelve una respuesta afirmativa o negat
 ### /autonomax/usuarios
 
 #### GET
-##### Summary:
+##### Sumario:
 
 Devolver todos los usuarios
 
-##### Description:
+##### Descripción:
 
 Devuelve todos los usuarios
 
-##### Responses
+##### Respuesta
 
 | Code | Description |
 | ---- | ----------- |
