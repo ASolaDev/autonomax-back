@@ -15,6 +15,8 @@ import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Data
@@ -38,7 +40,8 @@ public class Usuarios {
     @Enumerated(EnumType.STRING)
     private Rol rol = Rol.Usuario; // Ponemos por defecto el rol de Usuario al crear un usuario
 
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Facturas> facturas = new ArrayList<>();
 
 }

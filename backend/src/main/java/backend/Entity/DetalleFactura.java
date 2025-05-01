@@ -7,6 +7,8 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.math.BigDecimal;
 
@@ -18,19 +20,17 @@ import java.math.BigDecimal;
 public class DetalleFactura {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_factura_detalle;
+    private Long id_detalle;
 
+    private String descripcion;
     private Integer cantidad;
     private BigDecimal precioUnitario;
     private BigDecimal subtotal;
 
     @ManyToOne
     @JoinColumn(name = "id_factura", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private Facturas factura;
 
-    @ManyToOne
-    @JoinColumn(name = "id_detalle", nullable = false)
-    @JsonIgnore
-    private Detalles detalle;
 }

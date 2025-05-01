@@ -1,12 +1,14 @@
 package backend.Entity;
 
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Data
@@ -21,7 +23,7 @@ public class Clientes {
     @Column(name = "nombre_cliente", length = 100, nullable = false)
     private String nombre_cliente;
 
-    @Column(name = "cif_cliente", length = 20, nullable = false)
+    @Column(name = "cif_cliente", length = 20, nullable = false, unique = true)
     private String cif_cliente;
 
     @Column(name = "direccion_cliente", nullable = false)
@@ -33,6 +35,7 @@ public class Clientes {
     @Column(name = "telefono_cliente", length = 20, nullable = false)
     private String telefono_cliente;
 
-    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Facturas> facturas = new ArrayList<>();
+
 }

@@ -1,15 +1,15 @@
 package backend.Entity;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 @Entity
 @Data
@@ -39,7 +39,7 @@ public class Facturas {
     @Column(name = "estado")
     private Estado estado = Estado.Pendiente;
 
-    @OneToMany(mappedBy = "factura", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "factura", cascade = CascadeType.ALL,orphanRemoval = true)
     private List<DetalleFactura> facturasDetalles = new ArrayList<>();
 
     // Hacer la relación ManyToOne en Spring Boot
@@ -55,6 +55,7 @@ public class Facturas {
 
     // Hacer la relación ManyToOne en Spring Boot
     @ManyToOne(fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_cliente")
     @JsonIgnore
     private Clientes cliente;
