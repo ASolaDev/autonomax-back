@@ -8,8 +8,7 @@ import org.springframework.stereotype.Repository;
 import backend.Entity.Clientes;
 
 @Repository
-public interface ClientesRepository extends JpaRepository<Clientes,Long>
-{
+public interface ClientesRepository extends JpaRepository<Clientes, Long> {
     @Query("FROM Clientes c WHERE c.cif_cliente = :cif")
     Clientes ComprobarClientePorCIF(@Param("cif") String cif);
 

@@ -10,16 +10,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("autonomax/")
-public class DatosEmpresaController
-{
+public class DatosEmpresaController {
     @Autowired
     private DatosEmpresaService datosEmpresaService;
 
-
-    // Método para devolver todos los datos de la empresa, en principio se necesita todo
+    // Método para devolver todos los datos de la empresa, en principio se necesita
+    // todo
     @GetMapping("empresa/{id}")
-    private DatosEmpresa obtenerPorId(@PathVariable Long id)
-    {
+    private DatosEmpresa obtenerPorId(@PathVariable Long id) {
         return datosEmpresaService.obtenerPorId(id);
     }
 }

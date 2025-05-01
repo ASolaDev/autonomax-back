@@ -19,8 +19,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class FacturaDetallesDTO
-{
+public class FacturaDetallesDTO {
 
     private String numeroFactura;
 
@@ -35,7 +34,6 @@ public class FacturaDetallesDTO
     private Estado estado;
 
     private List<DetalleFactura> facturasDetalles = new ArrayList<>();
-
 
     // Datos que necesito en las relaciones
     private String cifCliente;
