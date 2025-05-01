@@ -3,7 +3,7 @@
 # OpenAPI definition
 ## Version: v0
 
-### /autonomaX/usuario/{id}
+### /autonomax/usuario/{id}
 
 #### GET
 ##### Summary:
@@ -68,7 +68,7 @@ Elimina al usuario de la base de datos, si no lo encuentra no hace nada
 | ---- | ----------- |
 | 200 | OK |
 
-### /autonomaX/nuevo_usuario
+### /autonomax/nuevo_usuario
 
 #### POST
 ##### Summary:
@@ -85,7 +85,7 @@ Crea un nuevo usuario validando el email, el nombre y la contraseña. Devuelve e
 | ---- | ----------- |
 | 200 | OK |
 
-### /autonomaX/login
+### /autonomax/login
 
 #### POST
 ##### Summary:
@@ -102,7 +102,7 @@ A partir de un email y una contraseña devuelve una respuesta afirmativa o negat
 | ---- | ----------- |
 | 200 | OK |
 
-### /autonomaX/usuarios
+### /autonomax/usuarios
 
 #### GET
 ##### Summary:
