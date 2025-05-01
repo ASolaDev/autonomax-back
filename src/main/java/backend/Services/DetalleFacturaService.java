@@ -15,20 +15,15 @@ public class DetalleFacturaService {
     @Autowired
     private DetalleFacturaRepository detalleFacturaRepository;
 
+    public ResponseEntity<?> crearDetalleFactura(List<DetalleFactura> detalles, Facturas factura) {
 
-
-    public ResponseEntity<?> crearDetalleFactura(List<DetalleFactura> detalles, Facturas factura)
-    {
-
-
-        for (DetalleFactura detalle:detalles)
-        {
-           detalle.setFactura(factura);
-           detalle.setDescripcion(detalle.getDescripcion());
-           detalle.setPrecioUnitario(detalle.getPrecioUnitario());
-           detalle.setCantidad(detalle.getCantidad());
-           detalle.setSubtotal(detalle.getSubtotal());
-           detalleFacturaRepository.save(detalle);
+        for (DetalleFactura detalle : detalles) {
+            detalle.setFactura(factura);
+            detalle.setDescripcion(detalle.getDescripcion());
+            detalle.setPrecioUnitario(detalle.getPrecioUnitario());
+            detalle.setCantidad(detalle.getCantidad());
+            detalle.setSubtotal(detalle.getSubtotal());
+            detalleFacturaRepository.save(detalle);
         }
 
         return null;

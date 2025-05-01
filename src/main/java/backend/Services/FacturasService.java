@@ -37,70 +37,57 @@ public class FacturasService {
     @Autowired
     private DetalleFacturaService detalleFacturaService;
 
-
-    public Facturas encontrarFacturaPorNumeroFactura(String numeroFactura)
-    {
+    public Facturas encontrarFacturaPorNumeroFactura(String numeroFactura) {
         return facturasRepository.ObtenerFacturaPorNumeroFactura(numeroFactura);
     }
 
-
-    public List<Facturas> obtenerTodas()
-    {
+    public List<Facturas> obtenerTodas() {
         return facturasRepository.findAll();
     }
 
-
-    public Facturas buscarFacturaPorId(Long id)
-    {
+    public Facturas buscarFacturaPorId(Long id) {
         return facturasRepository.findById(id).orElse(null);
     }
 
-
-    public ResponseEntity<?> crearFactura(@RequestBody FacturaDetallesDTO facturaJson)
-    {
+    public ResponseEntity<?> crearFactura(@RequestBody FacturaDetallesDTO facturaJson) {
         // 1. Comprobamos que los campos que no tienen que ser nulos, no lo sean
 
-        if(facturaJson.getNumeroFactura() == "")
+        if (facturaJson.getNumeroFactura() == "")
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No hay un número de factura");
 
-        if(facturasRepository.ObtenerFacturaPorNumeroFactura(facturaJson.getNumeroFactura()) != null)
+        if (facturasRepository.ObtenerFacturaPorNumeroFactura(facturaJson.getNumeroFactura()) != null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Número de factura duplicado");
-
 
         /*
          * Hacer lo siguiente en los repositorios
-         *       ➡️ Buscar al cliente por su CIF
-         *       ➡️ Buscar al usuario por su email
-         *       ➡️ Buscar a la empresa por su nombre (solo tenemos 1)
-         * */
+         * ➡️ Buscar al cliente por su CIF
+         * ➡️ Buscar al usuario por su email
+         * ➡️ Buscar a la empresa por su nombre (solo tenemos 1)
+         */
 
         Usuarios usuEncontrado = usuariosRepository.ComprobarUsuarioPorEmail(facturaJson.getEmailUsuario());
 
-        if(usuEncontrado == null)
+        if (usuEncontrado == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El usuario no existe");
-
 
         Clientes clienteEncontrado = clientesRepository.ComprobarClientePorCIF(facturaJson.getCifCliente());
 
-        if(clienteEncontrado == null)
+        if (clienteEncontrado == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El cliente no existe");
 
+        DatosEmpresa empresaEncontrada = datosEmpresaRepository
+                .ComprobarEmpresaPorNombre(facturaJson.getNombreEmpresa());
 
-
-        DatosEmpresa empresaEncontrada = datosEmpresaRepository.ComprobarEmpresaPorNombre(facturaJson.getNombreEmpresa());
-
-        if(empresaEncontrada == null)
+        if (empresaEncontrada == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El nombre de la empresa no existe");
 
-
-        if(!facturaJson.getIva().equals(new BigDecimal(21.00)) && !facturaJson.getIva().equals(new BigDecimal(10.00))
-        && !facturaJson.getIva().equals(new BigDecimal(4.00)))
-        {
+        if (!facturaJson.getIva().equals(new BigDecimal(21.00)) && !facturaJson.getIva().equals(new BigDecimal(10.00))
+                && !facturaJson.getIva().equals(new BigDecimal(4.00))) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("IVA tiene que ser 21, 10 o 4");
 
         }
 
-        if(facturaJson.getFacturasDetalles().size() <= 0)
+        if (facturaJson.getFacturasDetalles().size() <= 0)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se han incluido detalles en la factura");
 
         // 2. Si todo esta correcto, procedemos a meter todo en la BD
@@ -117,72 +104,59 @@ public class FacturasService {
         facturaNueva.setUsuario(usuEncontrado);
         facturaNueva.setEmpresa(empresaEncontrada);
 
-
         facturasRepository.save(facturaNueva);
 
-
-        // Al crear la factura, podemos agregar los detalles (se comprobó arriba que si no hay detalles, de error)
+        // Al crear la factura, podemos agregar los detalles (se comprobó arriba que si
+        // no hay detalles, de error)
 
         Facturas facturaDetalles = encontrarFacturaPorNumeroFactura(facturaNueva.getNumero_factura());
 
-        if(facturaDetalles != null)
-        {
-            detalleFacturaService.crearDetalleFactura(facturaJson.getFacturasDetalles(),facturaDetalles);
+        if (facturaDetalles != null) {
+            detalleFacturaService.crearDetalleFactura(facturaJson.getFacturasDetalles(), facturaDetalles);
 
             return ResponseEntity.status(HttpStatus.CREATED).body("Factura creada");
-        }
-        else
-        {
+        } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se ha encontrado la factura");
         }
 
-
-
-
     }
 
-
-    public ResponseEntity<?> actualizarFactura(Long id, FacturaDetallesDTO facturaJson)
-    {
+    public ResponseEntity<?> actualizarFactura(Long id, FacturaDetallesDTO facturaJson) {
         // 1. Comprobar que los campos no son nulos y la factura EXISTE
 
-        if (facturaJson.getNumeroFactura() == ""  || facturaJson.getNumeroFactura().trim().isEmpty())
+        if (facturaJson.getNumeroFactura() == "" || facturaJson.getNumeroFactura().trim().isEmpty())
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No hay un número de factura");
-
 
         Usuarios usuEncontrado = usuariosRepository.ComprobarUsuarioPorEmail(facturaJson.getEmailUsuario());
 
-        if(usuEncontrado == null)
+        if (usuEncontrado == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El usuario no existe");
-
 
         Clientes clienteEncontrado = clientesRepository.ComprobarClientePorCIF(facturaJson.getCifCliente());
 
-        if(clienteEncontrado == null)
+        if (clienteEncontrado == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El cliente no existe");
 
+        DatosEmpresa empresaEncontrada = datosEmpresaRepository
+                .ComprobarEmpresaPorNombre(facturaJson.getNombreEmpresa());
 
-        DatosEmpresa empresaEncontrada = datosEmpresaRepository.ComprobarEmpresaPorNombre(facturaJson.getNombreEmpresa());
-
-        if(empresaEncontrada == null)
+        if (empresaEncontrada == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El nombre de la empresa no existe");
-
 
         Facturas facturaEncontrada = buscarFacturaPorId(id);
 
-        if(facturaEncontrada == null)
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("La factura" + facturaJson.getNumeroFactura() + " no existe");
+        if (facturaEncontrada == null)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("La factura" + facturaJson.getNumeroFactura() + " no existe");
 
-        if(!facturaJson.getIva().equals(new BigDecimal(21.00)) && !facturaJson.getIva().equals(new BigDecimal(10.00))
-                && !facturaJson.getIva().equals(new BigDecimal(4.00)))
-        {
+        if (!facturaJson.getIva().equals(new BigDecimal(21.00)) && !facturaJson.getIva().equals(new BigDecimal(10.00))
+                && !facturaJson.getIva().equals(new BigDecimal(4.00))) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("IVA tiene que ser 21, 10 o 4");
 
         }
 
-        if(facturaJson.getFacturasDetalles().size() <= 0)
+        if (facturaJson.getFacturasDetalles().size() <= 0)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se han incluido detalles en la factura");
-
 
         // 2. Si todo es correcto, actualizamos
 
@@ -196,22 +170,18 @@ public class FacturasService {
         facturaEncontrada.setEmpresa(empresaEncontrada);
         facturasRepository.save(facturaEncontrada);
 
-        detalleFacturaService.crearDetalleFactura(facturaJson.getFacturasDetalles(),facturaEncontrada);
+        detalleFacturaService.crearDetalleFactura(facturaJson.getFacturasDetalles(), facturaEncontrada);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(" Factura actualizada ");
 
-
     }
 
-
-    public ResponseEntity<?> borrarFactura(Long id)
-    {
+    public ResponseEntity<?> borrarFactura(Long id) {
         Facturas factura = facturasRepository.findById(id).orElse(null);
 
-        if(factura == null)
+        if (factura == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("La factura no se ha encontrado");
-        else
-        {
+        else {
             facturasRepository.delete(factura);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Factura eliminada");
 
