@@ -1,5 +1,14 @@
 package backend.Services;
 
+import java.math.BigDecimal;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
+
 import backend.DTOS.FacturaDetallesDTO;
 import backend.Entity.Clientes;
 import backend.Entity.DatosEmpresa;
@@ -9,15 +18,6 @@ import backend.Repository.ClientesRepository;
 import backend.Repository.DatosEmpresaRepository;
 import backend.Repository.FacturasRepository;
 import backend.Repository.UsuariosRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-
-import java.math.BigDecimal;
-import java.util.List;
 
 @Service
 public class FacturasService {
@@ -50,8 +50,8 @@ public class FacturasService {
     }
 
     public ResponseEntity<?> crearFactura(@RequestBody FacturaDetallesDTO facturaJson) {
-        // 1. Comprobamos que los campos que no tienen que ser nulos, no lo sean
 
+        // 1. Comprobamos que los campos que no tienen que ser nulos, no lo sean
         if (facturaJson.getNumeroFactura() == "")
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No hay un número de factura");
 
@@ -60,9 +60,9 @@ public class FacturasService {
 
         /*
          * Hacer lo siguiente en los repositorios
-         * ➡️ Buscar al cliente por su CIF
-         * ➡️ Buscar al usuario por su email
-         * ➡️ Buscar a la empresa por su nombre (solo tenemos 1)
+         * Buscar al cliente por su CIF
+         * Buscar al usuario por su email
+         * Buscar a la empresa por su nombre (solo tenemos 1)
          */
 
         Usuarios usuEncontrado = usuariosRepository.ComprobarUsuarioPorEmail(facturaJson.getEmailUsuario());

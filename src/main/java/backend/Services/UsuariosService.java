@@ -37,6 +37,7 @@ public class UsuariosService {
 
         if (usuEncontrado != null) {
             ResponseEntity<?> validacionResultado = ValidarUsuario(usuario, true, id);
+
             if (validacionResultado != null) {
                 return validacionResultado;
             }
@@ -49,8 +50,9 @@ public class UsuariosService {
             Usuarios usuarioGuardado = usuariosRepository.save(usuEncontrado);
 
             return ResponseEntity.status(HttpStatus.CREATED).body("Usuario actualizado!");
-        } else
+        } else {
             return null;
+        }
     }
 
     // Crear un nuevo usuario
@@ -93,8 +95,9 @@ public class UsuariosService {
                 return new ResponseEntity<>(usuEncontrado, HttpStatus.OK);
             } else
                 return ResponseEntity.status(401).body("Contraseña no coincide.");
-        } else
+        } else {
             return ResponseEntity.status(401).body("Email no coincide, Usuario no encontrado.");
+        }
     }
 
     // Método para validar el formato del email
