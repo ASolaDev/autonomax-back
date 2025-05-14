@@ -25,7 +25,7 @@ class ClientesServicesTest {
     }
 
     @Test
-    void testObtenerTodos() {
+    void obtenerTodosTest() {
         List<Clientes> clientesList = Arrays.asList(new Clientes(), new Clientes());
         when(clientesRepository.findAll()).thenReturn(clientesList);
 
@@ -36,7 +36,7 @@ class ClientesServicesTest {
     }
 
     @Test
-    void testObtenerPorId_Exists() {
+    void obtenerPorIdExisteTest() {
         Clientes cliente = new Clientes();
         cliente.setId(1L);
         when(clientesRepository.findById(1L)).thenReturn(Optional.of(cliente));
@@ -48,7 +48,7 @@ class ClientesServicesTest {
     }
 
     @Test
-    void testObtenerPorId_NotExists() {
+    void obtenerPorIdNoExisteTest() {
         when(clientesRepository.findById(2L)).thenReturn(Optional.empty());
 
         Clientes result = clientesServices.obtenerPorId(2L);
@@ -57,7 +57,7 @@ class ClientesServicesTest {
     }
 
     @Test
-    void testEliminarCliente_Exists() {
+    void eliminarClienteExisteTest() {
         Clientes cliente = new Clientes();
         cliente.setId(1L);
         when(clientesRepository.findById(1L)).thenReturn(Optional.of(cliente));
@@ -68,7 +68,7 @@ class ClientesServicesTest {
     }
 
     @Test
-    void testEliminarCliente_NotExists() {
+    void eliminarClienteNoExisteTest() {
         when(clientesRepository.findById(2L)).thenReturn(Optional.empty());
 
         clientesServices.eliminarCliente(2L);
@@ -77,7 +77,7 @@ class ClientesServicesTest {
     }
 
     @Test
-    void testActualizarCliente_Valid() {
+    void actualizarClienteValidoTest() {
         Clientes clienteExistente = new Clientes();
         clienteExistente.setId(1L);
 
@@ -99,7 +99,7 @@ class ClientesServicesTest {
     }
 
     @Test
-    void testActualizarCliente_InvalidEmail() {
+    void actualizarClienteInvalidoEmailTest() {
         Clientes clienteExistente = new Clientes();
         clienteExistente.setId(1L);
 
@@ -116,7 +116,7 @@ class ClientesServicesTest {
     }
 
     @Test
-    void testActualizarCliente_NotFound() {
+    void actualizarClienteNoEncontradoTest() {
         Clientes clienteUpdate = new Clientes();
         when(clientesRepository.findById(2L)).thenReturn(Optional.empty());
 
@@ -127,7 +127,7 @@ class ClientesServicesTest {
     }
 
     @Test
-    void testCrearCliente_Success() {
+    void crearClienteValidoTest() {
         Clientes cliente = new Clientes();
         cliente.setCif_cliente("CIF123");
         cliente.setEmail_cliente("test@email.com");
@@ -142,7 +142,7 @@ class ClientesServicesTest {
     }
 
     @Test
-    void testCrearCliente_InvalidEmail() {
+    void crearClienteInvalidoEmailTest() {
         Clientes cliente = new Clientes();
         cliente.setCif_cliente("CIF123");
         cliente.setEmail_cliente("invalid-email");
@@ -157,7 +157,7 @@ class ClientesServicesTest {
     }
 
     @Test
-    void testCrearCliente_AlreadyExists() {
+    void crearClienteYaExisteTest() {
         Clientes cliente = new Clientes();
         cliente.setCif_cliente("CIF123");
         cliente.setEmail_cliente("test@email.com");
