@@ -22,7 +22,7 @@ class DetalleFacturaServiceTest {
     void setUp() {
         detalleFacturaRepository = mock(DetalleFacturaRepository.class);
         detalleFacturaService = new DetalleFacturaService();
-        // Inject mock repository
+
         var field = DetalleFacturaService.class.getDeclaredFields()[0];
         field.setAccessible(true);
         try {
@@ -33,7 +33,7 @@ class DetalleFacturaServiceTest {
     }
 
     @Test
-    void testCrearDetalleFactura_SavesAllDetallesWithFactura() {
+    void crearDetalleFacturaGuardarDetallesConFacturaTest() {
         Facturas factura = new Facturas();
         factura.setId(1L);
 
@@ -53,10 +53,8 @@ class DetalleFacturaServiceTest {
 
         ResponseEntity<?> response = detalleFacturaService.crearDetalleFactura(detalles, factura);
 
-        // Verify save called for each detalle
         verify(detalleFacturaRepository, times(2)).save(any(DetalleFactura.class));
 
-        // Capture saved detalles
         ArgumentCaptor<DetalleFactura> captor = ArgumentCaptor.forClass(DetalleFactura.class);
         verify(detalleFacturaRepository, times(2)).save(captor.capture());
         List<DetalleFactura> savedDetalles = captor.getAllValues();
@@ -65,12 +63,11 @@ class DetalleFacturaServiceTest {
             assertEquals(factura, savedDetalle.getFactura());
         }
 
-        // The method returns null
         assertNull(response);
     }
 
     @Test
-    void testCrearDetalleFactura_EmptyList() {
+    void crearDetalleFacturaListaVaciaTest() {
         Facturas factura = new Facturas();
         List<DetalleFactura> detalles = List.of();
 

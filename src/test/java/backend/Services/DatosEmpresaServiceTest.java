@@ -17,7 +17,7 @@ class DatosEmpresaServiceTest {
     void setUp() {
         datosEmpresaRepository = mock(DatosEmpresaRepository.class);
         datosEmpresaService = new DatosEmpresaService();
-        // Use reflection to inject the mock repository
+
         try {
             java.lang.reflect.Field repoField = DatosEmpresaService.class.getDeclaredField("datosEmpresaRepository");
             repoField.setAccessible(true);
@@ -28,7 +28,7 @@ class DatosEmpresaServiceTest {
     }
 
     @Test
-    void testObtenerPorId_Found() {
+    void obtenerPorIdEncontradoTest() {
         Long id = 1L;
         DatosEmpresa empresa = new DatosEmpresa();
         when(datosEmpresaRepository.findById(id)).thenReturn(Optional.of(empresa));
@@ -41,7 +41,7 @@ class DatosEmpresaServiceTest {
     }
 
     @Test
-    void testObtenerPorId_NotFound() {
+    void obtenerPorIdNoEncontradoTest() {
         Long id = 2L;
         when(datosEmpresaRepository.findById(id)).thenReturn(Optional.empty());
 

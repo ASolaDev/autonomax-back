@@ -32,7 +32,7 @@ class UsuariosServiceTest {
     }
 
     @Test
-    void obtenerTodosLosUsuarios_returnsList() {
+    void obtenerTodosLosUsuariosTest() {
         Usuarios u1 = new Usuarios();
         Usuarios u2 = new Usuarios();
         when(usuariosRepository.findAll()).thenReturn(Arrays.asList(u1, u2));
@@ -44,7 +44,7 @@ class UsuariosServiceTest {
     }
 
     @Test
-    void obtenerUsuarioPorID_found() {
+    void obtenerUsuarioPorIDExisteTest() {
         Usuarios usuario = new Usuarios();
         usuario.setId(1L);
         when(usuariosRepository.findById(1L)).thenReturn(Optional.of(usuario));
@@ -56,7 +56,7 @@ class UsuariosServiceTest {
     }
 
     @Test
-    void obtenerUsuarioPorID_notFound() {
+    void obtenerUsuarioPorIDNoExisteTest() {
         when(usuariosRepository.findById(2L)).thenReturn(Optional.empty());
 
         Usuarios result = usuariosService.obtenerUsuarioPorID(2L);
@@ -65,7 +65,7 @@ class UsuariosServiceTest {
     }
 
     @Test
-    void crearUsuario_validUser() {
+    void crearUsuarioValidoTest() {
         Usuarios usuario = new Usuarios();
         usuario.setNombre_usuario("test");
         usuario.setPassword("1234");
@@ -83,7 +83,7 @@ class UsuariosServiceTest {
     }
 
     @Test
-    void crearUsuario_invalidEmail() {
+    void crearUsuarioEmailInvalidoTest() {
         Usuarios usuario = new Usuarios();
         usuario.setNombre_usuario("test");
         usuario.setPassword("1234");
@@ -97,7 +97,7 @@ class UsuariosServiceTest {
     }
 
     @Test
-    void crearUsuario_duplicateEmail() {
+    void crearUsuarioEmailDuplicadoTest() {
         Usuarios usuario = new Usuarios();
         usuario.setNombre_usuario("test");
         usuario.setPassword("1234");
@@ -113,7 +113,7 @@ class UsuariosServiceTest {
     }
 
     @Test
-    void ActualizarUsuario_foundAndValid() {
+    void actualizarUsuarioEncontradoValidoTest() {
         Usuarios usuario = new Usuarios();
         usuario.setNombre_usuario("nuevo");
         usuario.setPassword("1234");
@@ -131,41 +131,41 @@ class UsuariosServiceTest {
         when(usuariosRepository.ComprobarUsuarioPorEmail(anyString())).thenReturn(null);
         when(usuariosRepository.save(any(Usuarios.class))).thenReturn(existente);
 
-        ResponseEntity<?> response = usuariosService.ActualizarUsuario(1L, usuario);
+        ResponseEntity<?> response = usuariosService.actualizarUsuario(1L, usuario);
 
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
         assertEquals("Usuario actualizado!", response.getBody());
     }
 
     @Test
-    void ActualizarUsuario_notFound() {
+    void actualizarUsuarioNoExisteTest() {
         Usuarios usuario = new Usuarios();
         when(usuariosRepository.findById(1L)).thenReturn(Optional.empty());
 
-        ResponseEntity<?> response = usuariosService.ActualizarUsuario(1L, usuario);
+        ResponseEntity<?> response = usuariosService.actualizarUsuario(1L, usuario);
 
         assertNull(response);
     }
 
     @Test
-    void EliminarUsuario_found() {
+    void eliminarUsuarioExisteTest() {
         Usuarios usuario = new Usuarios();
         usuario.setId(1L);
         when(usuariosRepository.findById(1L)).thenReturn(Optional.of(usuario));
 
-        assertDoesNotThrow(() -> usuariosService.EliminarUsuario(1L));
+        assertDoesNotThrow(() -> usuariosService.eliminarUsuario(1L));
         verify(usuariosRepository).delete(usuario);
     }
 
     @Test
-    void EliminarUsuario_notFound() {
+    void eliminarUsuarioNoExisteTest() {
         when(usuariosRepository.findById(1L)).thenReturn(Optional.empty());
 
-        assertThrows(EntityNotFoundException.class, () -> usuariosService.EliminarUsuario(1L));
+        assertThrows(EntityNotFoundException.class, () -> usuariosService.eliminarUsuario(1L));
     }
 
     @Test
-    void Login_success() {
+    void loginExitoTest() {
         Usuarios usuario = new Usuarios();
         usuario.setEmail("test@mail.com");
         usuario.setPassword(new org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder().encode("1234"));
@@ -179,7 +179,7 @@ class UsuariosServiceTest {
     }
 
     @Test
-    void Login_wrongPassword() {
+    void loginPassIncorrectaTest() {
         Usuarios usuario = new Usuarios();
         usuario.setEmail("test@mail.com");
         usuario.setPassword(new org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder().encode("1234"));
@@ -193,7 +193,7 @@ class UsuariosServiceTest {
     }
 
     @Test
-    void Login_userNotFound() {
+    void loginUsuarioNoExisteTest() {
         when(usuariosRepository.ComprobarUsuarioPorEmail("notfound@mail.com")).thenReturn(null);
 
         ResponseEntity<?> response = usuariosService.Login("notfound@mail.com", "1234");
@@ -203,9 +203,9 @@ class UsuariosServiceTest {
     }
 
     @Test
-    void hashearContraseña_notEmpty() {
+    void hashearPassNoVaciaTest() {
         String raw = "clave";
-        String hashed = usuariosService.hashearContraseña(raw);
+        String hashed = usuariosService.hashearPass(raw);
 
         assertNotNull(hashed);
         assertNotEquals(raw, hashed);
@@ -213,9 +213,9 @@ class UsuariosServiceTest {
     }
 
     @Test
-    void hashearContraseña_empty() {
+    void hashearPassVaciaTest() {
         String raw = "";
-        String hashed = usuariosService.hashearContraseña(raw);
+        String hashed = usuariosService.hashearPass(raw);
 
         assertEquals("", hashed);
     }
