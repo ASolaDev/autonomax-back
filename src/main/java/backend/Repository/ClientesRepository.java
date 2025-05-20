@@ -12,4 +12,7 @@ public interface ClientesRepository extends JpaRepository<Clientes, Long> {
     @Query("FROM Clientes c WHERE c.cif_cliente = :cif")
     Clientes ComprobarClientePorCIF(@Param("cif") String cif);
 
+    @Query("FROM Clientes c WHERE c.email_cliente = :email")
+    Clientes ComprobarClientePorEmail(@Param("email") String email);
+
 }

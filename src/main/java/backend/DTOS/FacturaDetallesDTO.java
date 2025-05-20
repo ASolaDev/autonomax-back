@@ -24,6 +24,7 @@ public class FacturaDetallesDTO {
     private String numeroFactura;
 
     private Date fechaEmision;
+    private Date fechaPago;
 
     private BigDecimal subtotal;
 

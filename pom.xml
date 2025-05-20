@@ -9,10 +9,10 @@
 		<version>3.4.4</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>backend</groupId>
-	<artifactId>backend</artifactId>
+	<groupId>autonomax-back</groupId>
+	<artifactId>autonomax-back</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>backend</name>
+	<name>autonomax-back</name>
 	<description>Proyecto final 2ºDAW backend</description>
 	<url />
 	<licenses>

@@ -21,6 +21,16 @@ public class FacturasController {
         return facturasService.obtenerTodas();
     }
 
+    @GetMapping("factura/{id}")
+    public Facturas obtenerFacturasPorID(@PathVariable Long id) {
+        return facturasService.buscarFacturaPorId(id);
+    }
+
+    @GetMapping("factura/numero/{numeroFactura}")
+    public Facturas obtenerFacturasPorID(@PathVariable String numeroFactura) {
+        return facturasService.encontrarFacturaPorNumeroFactura(numeroFactura);
+    }
+
     @PostMapping("nueva_factura")
     public ResponseEntity<?> crearFactura(@RequestBody FacturaDetallesDTO facturaDetallesDTO) {
         return facturasService.crearFactura(facturaDetallesDTO);
