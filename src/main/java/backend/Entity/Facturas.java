@@ -41,6 +41,9 @@ public class Facturas {
     @Column(name = "fecha_emision", nullable = false)
     private Date fecha_emision;
 
+    @Column(name = "fecha_pago")
+    private Date fecha_pago;
+
     @Column(name = "subtotal", nullable = false, precision = 10, scale = 2)
     private BigDecimal subtotal;
 

@@ -1,20 +1,15 @@
 package backend.DTOS;
 
-import backend.Entity.DetalleFactura;
-import backend.Entity.Estado;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.OneToMany;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import backend.Entity.DetalleFactura;
+import backend.Entity.Estado;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
@@ -24,6 +19,7 @@ public class FacturaDetallesDTO {
     private String numeroFactura;
 
     private Date fechaEmision;
+    private Date fechaPago;
 
     private BigDecimal subtotal;
 

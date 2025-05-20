@@ -32,25 +32,27 @@ public class UsuariosService {
     }
 
     // Actualizar un usuario
-    public ResponseEntity<?> ActualizarUsuario(Long id, Usuarios usuario) {
+    public ResponseEntity<?> actualizarUsuario(Long id, Usuarios usuario) {
         Usuarios usuEncontrado = obtenerUsuarioPorID(id);
 
         if (usuEncontrado != null) {
-            ResponseEntity<?> validacionResultado = ValidarUsuario(usuario, true, id);
+            ResponseEntity<?> validacionResultado = validarUsuario(usuario, true, id);
+
             if (validacionResultado != null) {
                 return validacionResultado;
             }
 
             usuEncontrado.setNombre_usuario(usuario.getNombre_usuario());
             usuEncontrado.setEmail(usuario.getEmail());
-            usuEncontrado.setPassword(hashearContraseña(usuario.getPassword()));
+            usuEncontrado.setPassword(hashearPass(usuario.getPassword()));
             usuEncontrado.setRol(usuario.getRol());
 
             Usuarios usuarioGuardado = usuariosRepository.save(usuEncontrado);
 
             return ResponseEntity.status(HttpStatus.CREATED).body("Usuario actualizado!");
-        } else
+        } else {
             return null;
+        }
     }
 
     // Crear un nuevo usuario
@@ -58,12 +60,12 @@ public class UsuariosService {
         // Para posteriores mejoras, creamos validaciones de nombre y contraseñas con
         // REGEX
 
-        ResponseEntity<?> validacionResultado = ValidarUsuario(usuario, false, null);
+        ResponseEntity<?> validacionResultado = validarUsuario(usuario, false, null);
         if (validacionResultado != null) {
             return validacionResultado;
         }
 
-        usuario.setPassword(hashearContraseña(usuario.getPassword()));
+        usuario.setPassword(hashearPass(usuario.getPassword()));
 
         Usuarios usuarioGuardado = usuariosRepository.save(usuario);
 
@@ -72,7 +74,7 @@ public class UsuariosService {
     }
 
     // Borrar un usuario
-    public void EliminarUsuario(Long id) {
+    public void eliminarUsuario(Long id) {
         Usuarios usuario_encontrado = obtenerUsuarioPorID(id);
 
         if (usuario_encontrado != null) {
@@ -93,8 +95,9 @@ public class UsuariosService {
                 return new ResponseEntity<>(usuEncontrado, HttpStatus.OK);
             } else
                 return ResponseEntity.status(401).body("Contraseña no coincide.");
-        } else
+        } else {
             return ResponseEntity.status(401).body("Email no coincide, Usuario no encontrado.");
+        }
     }
 
     // Método para validar el formato del email
@@ -115,7 +118,7 @@ public class UsuariosService {
 
     // Metodo para validar al Usuario (sea si se ha encontrado o no, para no repetir
     // código en put/post
-    private ResponseEntity<?> ValidarUsuario(Usuarios usuario, boolean usuario_editar, Long id) {
+    private ResponseEntity<?> validarUsuario(Usuarios usuario, boolean usuario_editar, Long id) {
         if (usuario.getNombre_usuario().trim().length() < 3) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body("El nombre no cumple con la longitud suficiente (minimo 3)");
@@ -140,7 +143,7 @@ public class UsuariosService {
     }
 
     // Metodo para hashear la contraseña en BD
-    public String hashearContraseña(String clave) {
+    public String hashearPass(String clave) {
         if (!clave.isEmpty()) {
             BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
             return encoder.encode(clave);

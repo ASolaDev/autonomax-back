@@ -45,12 +45,12 @@ public class UsuariosController {
     @PutMapping("usuario/{id}")
     @Operation(summary = "Actualizar un usuario", description = "Actualiza al usuario mediante un id y un objeto Usuario (obligatorio esto para actualizar)")
     public ResponseEntity<?> actualizarUsuario(@PathVariable Long id, @RequestBody Usuarios usuario) {
-        return usuariosService.ActualizarUsuario(id, usuario);
+        return usuariosService.actualizarUsuario(id, usuario);
     }
 
     @DeleteMapping("usuario/{id}")
     @Operation(summary = "Eliminar un usuario", description = "Elimina al usuario de la base de datos, si no lo encuentra no hace nada")
     public void BorrarUsuarios(@PathVariable Long id) {
-        usuariosService.EliminarUsuario(id);
+        usuariosService.eliminarUsuario(id);
     }
 }
