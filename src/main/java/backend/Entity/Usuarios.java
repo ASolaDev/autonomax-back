@@ -38,7 +38,7 @@ public class Usuarios {
 
     @Column(name = "rol")
     @Enumerated(EnumType.STRING)
-    private Rol rol = Rol.Usuario; // Ponemos por defecto el rol de Usuario al crear un usuario
+    private Rol rol = Rol.USUARIO; // Ponemos por defecto el rol de Usuario al crear un usuario
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)

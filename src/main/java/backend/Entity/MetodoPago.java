@@ -1,6 +1,5 @@
 package backend.Entity;
 
 public enum MetodoPago {
-
-    Tarjeta,Efectivo,aCuenta
+    TARJETA, EFECTIVO, A_CUENTA
 }

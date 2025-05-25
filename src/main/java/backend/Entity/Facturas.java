@@ -54,7 +54,7 @@ public class Facturas {
     private BigDecimal total;
 
     @Column(name = "estado")
-    private Estado estado = Estado.Pendiente;
+    private Estado estado = Estado.PENDIENTE;
 
     @OneToMany(mappedBy = "factura", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DetalleFactura> facturasDetalles = new ArrayList<>();
