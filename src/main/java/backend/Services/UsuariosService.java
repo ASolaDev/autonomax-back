@@ -2,6 +2,7 @@ package backend.Services;
 
 import java.util.List;
 
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -84,14 +85,21 @@ public class UsuariosService {
         }
     }
 
-    public ResponseEntity<?> Login(String email, String contraseña) {
+    public ResponseEntity<?> Login(String email, String password, HttpSession httpSession) {
         Usuarios usuEncontrado = usuariosRepository.ComprobarUsuarioPorEmail(email);
 
         if (usuEncontrado != null) {
             // Comprobamos la contraseña hasheada con plana (la que mete el usuario)
             BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-            if (encoder.matches(contraseña.trim(), usuEncontrado.getPassword())) {
+            if (encoder.matches(password.trim(), usuEncontrado.getPassword())) {
+
+                // Guardamos la sesión en back (HTTPSESSION), en consecuencia
+                // se genera automáticamente una cookie (JSESSIONID)
+                httpSession.setAttribute("idUsuario",usuEncontrado.getId());
+                httpSession.setAttribute("emailUsuario",usuEncontrado.getEmail());
+                httpSession.setAttribute("nombreUsuario",usuEncontrado.getNombre_usuario());
+                httpSession.setAttribute("rolUsuario",usuEncontrado.getRol());
                 return new ResponseEntity<>(usuEncontrado, HttpStatus.OK);
             } else
                 return ResponseEntity.status(401).body("Contraseña no coincide.");
