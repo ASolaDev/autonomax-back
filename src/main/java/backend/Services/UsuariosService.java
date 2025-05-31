@@ -85,8 +85,8 @@ public class UsuariosService {
         }
     }
 
-    public ResponseEntity<?> Login(String email, String password, HttpSession httpSession) {
-        Usuarios usuEncontrado = usuariosRepository.ComprobarUsuarioPorEmail(email);
+    public ResponseEntity<?> Login(String nombre_usuario, String password, HttpSession httpSession) {
+        Usuarios usuEncontrado = usuariosRepository.ComprobarUsuarioPorNombreUsuario(nombre_usuario);
 
         if (usuEncontrado != null) {
             // Comprobamos la contraseña hasheada con plana (la que mete el usuario)
@@ -102,9 +102,9 @@ public class UsuariosService {
                 httpSession.setAttribute("rolUsuario",usuEncontrado.getRol());
                 return new ResponseEntity<>(usuEncontrado, HttpStatus.OK);
             } else
-                return ResponseEntity.status(401).body("Contraseña no coincide.");
+                return ResponseEntity.status(401).body("Contraseña incorrecta.");
         } else {
-            return ResponseEntity.status(401).body("Email no coincide, Usuario no encontrado.");
+            return ResponseEntity.status(401).body("Nombre de usuario incorrecto.");
         }
     }
 
@@ -122,6 +122,16 @@ public class UsuariosService {
         }
 
         return usuariosRepository.ComprobarUsuarioPorEmail(email) != null;
+    }
+
+    // Método para comprobar si el nombre de usuario ya está registrado
+    private boolean comprobarNombreUsuario(String nombre_usuario, boolean usuario_editar, Long id) {
+        if (usuario_editar) {
+            Usuarios usuarioExistente = usuariosRepository.ComprobarUsuarioPorNombreUsuario(nombre_usuario);
+            return (usuarioExistente != null && !usuarioExistente.getId().equals(id));
+        }
+
+        return usuariosRepository.ComprobarUsuarioPorNombreUsuario(nombre_usuario) != null;
     }
 
     // Metodo para validar al Usuario (sea si se ha encontrado o no, para no repetir
@@ -145,6 +155,11 @@ public class UsuariosService {
         if (comprobarEmail(usuario.getEmail(), usuario_editar, id)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body("El email ya está registrado.");
+        }
+
+        if (comprobarNombreUsuario(usuario.getNombre_usuario(), usuario_editar, id)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("El nombre de usuario ya está registrado.");
         }
 
         return null;
