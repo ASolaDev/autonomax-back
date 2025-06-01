@@ -71,7 +71,6 @@ public class UsuariosService {
         Usuarios usuarioGuardado = usuariosRepository.save(usuario);
 
         return ResponseEntity.status(HttpStatus.CREATED).body("Usuario creado");
-
     }
 
     // Borrar un usuario
@@ -98,10 +97,10 @@ public class UsuariosService {
 
                 // Guardamos la sesión en back (HTTPSESSION), en consecuencia
                 // se genera automáticamente una cookie (JSESSIONID)
-                httpSession.setAttribute("idUsuario",usuEncontrado.getId());
-                httpSession.setAttribute("emailUsuario",usuEncontrado.getEmail());
-                httpSession.setAttribute("nombreUsuario",usuEncontrado.getNombre_usuario());
-                httpSession.setAttribute("rolUsuario",usuEncontrado.getRol());
+                httpSession.setAttribute("idUsuario", usuEncontrado.getId());
+                httpSession.setAttribute("emailUsuario", usuEncontrado.getEmail());
+                httpSession.setAttribute("nombreUsuario", usuEncontrado.getNombre_usuario());
+                httpSession.setAttribute("rolUsuario", usuEncontrado.getRol());
                 return new ResponseEntity<>(usuEncontrado, HttpStatus.OK);
             } else
                 return ResponseEntity.status(401).body("Contraseña incorrecta.");

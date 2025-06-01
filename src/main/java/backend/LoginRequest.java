@@ -8,4 +8,3 @@ public class LoginRequest {
     private String password;
     // Getters y setters
 }
-

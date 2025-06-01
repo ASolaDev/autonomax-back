@@ -57,7 +57,6 @@ public class UsuariosController {
         usuariosService.eliminarUsuario(id);
     }
 
-
     @PostMapping("/logout")
     public ResponseEntity<?> logout(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
@@ -66,6 +65,5 @@ public class UsuariosController {
         }
         return ResponseEntity.ok().body("Sesión cerrada");
     }
-
 
 }
