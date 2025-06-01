@@ -85,8 +85,10 @@ public class UsuariosService {
         }
     }
 
-    public ResponseEntity<?> Login(String nombre_usuario, String password, HttpSession httpSession) {
-        Usuarios usuEncontrado = usuariosRepository.ComprobarUsuarioPorNombreUsuario(nombre_usuario);
+    public ResponseEntity<?> Login(String nombreUsuario, String password, HttpSession httpSession) {
+        Usuarios usuEncontrado = usuariosRepository.ComprobarUsuarioPorNombreUsuario(nombreUsuario);
+
+        System.out.println("Nombre usuario:" + nombreUsuario + "Contraseña:" + password);
 
         if (usuEncontrado != null) {
             // Comprobamos la contraseña hasheada con plana (la que mete el usuario)
@@ -125,13 +127,13 @@ public class UsuariosService {
     }
 
     // Método para comprobar si el nombre de usuario ya está registrado
-    private boolean comprobarNombreUsuario(String nombre_usuario, boolean usuario_editar, Long id) {
+    private boolean comprobarNombreUsuario(String nombreUsuario, boolean usuario_editar, Long id) {
         if (usuario_editar) {
-            Usuarios usuarioExistente = usuariosRepository.ComprobarUsuarioPorNombreUsuario(nombre_usuario);
+            Usuarios usuarioExistente = usuariosRepository.ComprobarUsuarioPorNombreUsuario(nombreUsuario);
             return (usuarioExistente != null && !usuarioExistente.getId().equals(id));
         }
 
-        return usuariosRepository.ComprobarUsuarioPorNombreUsuario(nombre_usuario) != null;
+        return usuariosRepository.ComprobarUsuarioPorNombreUsuario(nombreUsuario) != null;
     }
 
     // Metodo para validar al Usuario (sea si se ha encontrado o no, para no repetir
