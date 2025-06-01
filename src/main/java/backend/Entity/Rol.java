@@ -1,5 +1,5 @@
 package backend.Entity;
 
 public enum Rol {
-    Administrador, Usuario, Desarollo
+    Administrador, Usuario, Desarrollo
 }

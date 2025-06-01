@@ -1,9 +1,12 @@
 package backend.Controllers;
 
 import backend.Entity.Usuarios;
+import backend.LoginRequest;
 import backend.Services.UsuariosService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,8 +41,8 @@ public class UsuariosController {
 
     @PostMapping("login")
     @Operation(summary = "Loguear un usuario", description = "A partir de un email y una contraseña devuelve una respuesta afirmativa o negativa")
-    public ResponseEntity<?> Login(@RequestBody Usuarios usuario) {
-        return usuariosService.Login(usuario.getEmail(), usuario.getPassword());
+    public ResponseEntity<?> Login(@RequestBody LoginRequest loginRequest, HttpSession httpSession) {
+        return usuariosService.Login(loginRequest.getNombreUsuario(), loginRequest.getPassword(),httpSession);
     }
 
     @PutMapping("usuario/{id}")
@@ -53,4 +56,14 @@ public class UsuariosController {
     public void BorrarUsuarios(@PathVariable Long id) {
         usuariosService.eliminarUsuario(id);
     }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate(); // Invalida la sesión del servidor
+        }
+        return ResponseEntity.ok().body("Sesión cerrada");
+    }
+
 }

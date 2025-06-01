@@ -2,6 +2,7 @@ package backend.Services;
 
 import java.util.List;
 
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -70,7 +71,6 @@ public class UsuariosService {
         Usuarios usuarioGuardado = usuariosRepository.save(usuario);
 
         return ResponseEntity.status(HttpStatus.CREATED).body("Usuario creado");
-
     }
 
     // Borrar un usuario
@@ -84,19 +84,28 @@ public class UsuariosService {
         }
     }
 
-    public ResponseEntity<?> Login(String email, String contraseña) {
-        Usuarios usuEncontrado = usuariosRepository.ComprobarUsuarioPorEmail(email);
+    public ResponseEntity<?> Login(String nombreUsuario, String password, HttpSession httpSession) {
+        Usuarios usuEncontrado = usuariosRepository.ComprobarUsuarioPorNombreUsuario(nombreUsuario);
+
+        System.out.println("Nombre usuario:" + nombreUsuario + "Contraseña:" + password);
 
         if (usuEncontrado != null) {
             // Comprobamos la contraseña hasheada con plana (la que mete el usuario)
             BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-            if (encoder.matches(contraseña.trim(), usuEncontrado.getPassword())) {
+            if (encoder.matches(password.trim(), usuEncontrado.getPassword())) {
+
+                // Guardamos la sesión en back (HTTPSESSION), en consecuencia
+                // se genera automáticamente una cookie (JSESSIONID)
+                httpSession.setAttribute("idUsuario", usuEncontrado.getId());
+                httpSession.setAttribute("emailUsuario", usuEncontrado.getEmail());
+                httpSession.setAttribute("nombreUsuario", usuEncontrado.getNombre_usuario());
+                httpSession.setAttribute("rolUsuario", usuEncontrado.getRol());
                 return new ResponseEntity<>(usuEncontrado, HttpStatus.OK);
             } else
-                return ResponseEntity.status(401).body("Contraseña no coincide.");
+                return ResponseEntity.status(401).body("Contraseña incorrecta.");
         } else {
-            return ResponseEntity.status(401).body("Email no coincide, Usuario no encontrado.");
+            return ResponseEntity.status(401).body("Nombre de usuario incorrecto.");
         }
     }
 
@@ -114,6 +123,16 @@ public class UsuariosService {
         }
 
         return usuariosRepository.ComprobarUsuarioPorEmail(email) != null;
+    }
+
+    // Método para comprobar si el nombre de usuario ya está registrado
+    private boolean comprobarNombreUsuario(String nombreUsuario, boolean usuario_editar, Long id) {
+        if (usuario_editar) {
+            Usuarios usuarioExistente = usuariosRepository.ComprobarUsuarioPorNombreUsuario(nombreUsuario);
+            return (usuarioExistente != null && !usuarioExistente.getId().equals(id));
+        }
+
+        return usuariosRepository.ComprobarUsuarioPorNombreUsuario(nombreUsuario) != null;
     }
 
     // Metodo para validar al Usuario (sea si se ha encontrado o no, para no repetir
@@ -137,6 +156,11 @@ public class UsuariosService {
         if (comprobarEmail(usuario.getEmail(), usuario_editar, id)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body("El email ya está registrado.");
+        }
+
+        if (comprobarNombreUsuario(usuario.getNombre_usuario(), usuario_editar, id)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("El nombre de usuario ya está registrado.");
         }
 
         return null;
