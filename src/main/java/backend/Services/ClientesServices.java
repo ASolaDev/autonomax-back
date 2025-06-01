@@ -38,23 +38,29 @@ public class ClientesServices {
         Clientes clienteEncontrado = obtenerPorId(id);
 
         if (clienteEncontrado != null) {
-            if (!esEmailValido(cliente.getEmail_cliente()))
+            if (!esEmailValido(cliente.getEmail_cliente())) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El formato del email no es válido");
+            }
 
-            if (cliente.getNombre_cliente().trim().isEmpty())
+            if (cliente.getNombre_cliente().trim().isEmpty()) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El nombre no puede estar vacío");
+            }
 
-            if (cliente.getCif_cliente().trim().isEmpty())
+            if (cliente.getCif_cliente().trim().isEmpty()) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El CIF no puede estar vacío");
+            }
 
-            if (!comprobarCif(cliente.getCif_cliente(), true, cliente.getId()))
+            if (!comprobarCif(cliente.getCif_cliente(), true, cliente.getId())) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El CIF esta ya registrado");
+            }
 
-            if (cliente.getDireccion_cliente().trim().isEmpty())
+            if (cliente.getDireccion_cliente().trim().isEmpty()) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("La dirección no puede estar vacía");
+            }
 
-            if (cliente.getTelefono_cliente().trim().isEmpty())
+            if (cliente.getTelefono_cliente().trim().isEmpty()) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El teléfono no puede estar vacío");
+            }
 
             clienteEncontrado.setCif_cliente(cliente.getCif_cliente());
             clienteEncontrado.setNombre_cliente(cliente.getNombre_cliente());
@@ -65,9 +71,10 @@ public class ClientesServices {
             clientesRepository.save(clienteEncontrado);
             return ResponseEntity.ok(clienteEncontrado);
 
-        } else
+        } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body("Cliente no actualizado, revise los datos de nuevo");
+        }
 
     }
 
@@ -79,19 +86,21 @@ public class ClientesServices {
             if (!esEmailValido(cliente.getEmail_cliente()))
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El formato del email no es válido");
 
-            if (comprobarCif(cliente.getCif_cliente(), false, null))
+            if (comprobarCif(cliente.getCif_cliente(), false, null)) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El CIF ya esta registrado");
+            }
 
-            if (comprobarEmailCliente(cliente.getEmail_cliente(), false, null))
+            if (comprobarEmailCliente(cliente.getEmail_cliente(), false, null)) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El email ya esta registrado");
+            }
 
             clientesRepository.save(cliente);
+
             return ResponseEntity.status(HttpStatus.CREATED).body("Cliente creado con éxito!");
-        }
 
-        else
+        } else {
             return ResponseEntity.status(409).body("El cliente ya existe");
-
+        }
     }
 
     private boolean esEmailValido(String email) {
