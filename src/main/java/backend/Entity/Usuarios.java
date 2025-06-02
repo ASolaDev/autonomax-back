@@ -29,7 +29,7 @@ public class Usuarios {
     private Long id;
 
     @Column(name = "nombre_usuario", nullable = false)
-    private String nombre_usuario;
+    private String nombreUsuario;
 
     @Column(name = "email", nullable = false)
     private String email;
