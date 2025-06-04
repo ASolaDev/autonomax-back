@@ -36,13 +36,13 @@ public class Facturas {
     private Long id;
 
     @Column(name = "numero_factura", unique = true, nullable = false)
-    private String numero_factura;
+    private String numeroFactura;
 
     @Column(name = "fecha_emision", nullable = false)
-    private Date fecha_emision;
+    private Date fechaEmision;
 
     @Column(name = "fecha_pago")
-    private Date fecha_pago;
+    private Date fechaPago;
 
     @Column(name = "subtotal", nullable = false, precision = 10, scale = 2)
     private BigDecimal subtotal;

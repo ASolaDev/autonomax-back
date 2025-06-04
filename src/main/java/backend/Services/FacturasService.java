@@ -99,10 +99,10 @@ public class FacturasService {
         // Si todo esta correcto, procedemos a meter todo en la BD
         Facturas facturaNueva = new Facturas();
 
-        facturaNueva.setNumero_factura(facturaJson.getNumeroFactura());
+        facturaNueva.setNumeroFactura(facturaJson.getNumeroFactura());
         facturaNueva.setEstado(facturaJson.getEstado());
-        facturaNueva.setFecha_emision(facturaJson.getFechaEmision());
-        facturaNueva.setFecha_pago(facturaJson.getFechaPago());
+        facturaNueva.setFechaEmision(facturaJson.getFechaEmision());
+        facturaNueva.setFechaPago(facturaJson.getFechaPago());
         facturaNueva.setIva(facturaJson.getIva());
         facturaNueva.setSubtotal(facturaJson.getSubtotal());
         facturaNueva.setTotal(facturaJson.getTotal());
@@ -115,7 +115,7 @@ public class FacturasService {
         // Al crear la factura, podemos agregar los detalles (se comprobó arriba que si
         // no hay detalles, de error)
 
-        Facturas facturaDetalles = encontrarFacturaPorNumeroFactura(facturaNueva.getNumero_factura());
+        Facturas facturaDetalles = encontrarFacturaPorNumeroFactura(facturaNueva.getNumeroFactura());
 
         if (facturaDetalles != null) {
             detalleFacturaService.crearDetalleFactura(facturaJson.getFacturasDetalles(), facturaDetalles);
@@ -172,14 +172,15 @@ public class FacturasService {
 
         // Si todo es correcto, actualizamos
         facturaEncontrada.setEstado(facturaJson.getEstado());
-        facturaEncontrada.setFecha_emision(facturaJson.getFechaEmision());
+        facturaEncontrada.setFechaEmision(facturaJson.getFechaEmision());
         facturaEncontrada.setIva(facturaJson.getIva());
         facturaEncontrada.setSubtotal(facturaJson.getSubtotal());
-        facturaEncontrada.setFecha_pago(facturaJson.getFechaPago());
+        facturaEncontrada.setFechaPago(facturaJson.getFechaPago());
         facturaEncontrada.setTotal(facturaJson.getTotal());
         facturaEncontrada.setCliente(clienteEncontrado);
         facturaEncontrada.setUsuario(usuEncontrado);
         facturaEncontrada.setEmpresa(empresaEncontrada);
+
         facturasRepository.save(facturaEncontrada);
 
         detalleFacturaService.crearDetalleFactura(facturaJson.getFacturasDetalles(), facturaEncontrada);

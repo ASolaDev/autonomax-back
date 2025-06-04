@@ -17,6 +17,9 @@ public class DetalleFacturaService {
 
     public ResponseEntity<?> crearDetalleFactura(List<DetalleFactura> detalles, Facturas factura) {
 
+        // Borramos todos los detalles que tenía esa factura, ya que en front decide el usuario todos los detalles
+        factura.getFacturasDetalles().clear();
+
         for (DetalleFactura detalle : detalles) {
             detalle.setFactura(factura);
             detalle.setDescripcion(detalle.getDescripcion());

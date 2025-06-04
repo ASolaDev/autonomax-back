@@ -17,7 +17,7 @@ import java.sql.Date;
 public class Gastos {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_gasto;
+    private Long idGasto;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_usuario")
@@ -34,7 +34,7 @@ public class Gastos {
     private BigDecimal monto;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_categoria")
+    @JoinColumn(name = "idCategoria")
     @JsonIgnore
     private CategoriaGastos categoria;
 

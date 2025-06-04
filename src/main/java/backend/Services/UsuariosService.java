@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import backend.Entity.Usuarios;
@@ -19,8 +18,7 @@ public class UsuariosService {
     @Autowired
     private UsuariosRepository usuariosRepository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    
 
     // Obtener todos los usuarios
     public List<Usuarios> obtenerTodosLosUsuarios() {
@@ -50,7 +48,7 @@ public class UsuariosService {
 
             Usuarios usuarioGuardado = usuariosRepository.save(usuEncontrado);
 
-            return ResponseEntity.status(HttpStatus.CREATED).body("Usuario actualizado!");
+            return ResponseEntity.status(HttpStatus.CREATED).body(usuarioGuardado);
         } else {
             return null;
         }
@@ -70,7 +68,7 @@ public class UsuariosService {
 
         Usuarios usuarioGuardado = usuariosRepository.save(usuario);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body("Usuario creado");
+        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioGuardado);
     }
 
     // Borrar un usuario
