@@ -16,27 +16,27 @@ public class ProveedoresController {
     private ProveedoresService proveedoresService;
 
     @GetMapping("proveedores")
-    private List<Proveedores> obtenerTodos(){
+    private List<Proveedores> obtenerTodos() {
         return proveedoresService.obtenerTodos();
     }
 
     @GetMapping("proveedor/{id}")
-    private Proveedores obtenerPorId(@PathVariable Long id){
+    private Proveedores obtenerPorId(@PathVariable Long id) {
         return proveedoresService.obtenerPorId(id);
     }
 
     @PostMapping("crear_proveedor")
-    private ResponseEntity<?> crearProveedor(@RequestBody Proveedores proveedor){
+    private ResponseEntity<?> crearProveedor(@RequestBody Proveedores proveedor) {
         return proveedoresService.crearProveedor(proveedor);
     }
 
     @PutMapping("editar_proveedor/{id}")
-    private ResponseEntity<?> editarProveedor(@RequestBody Proveedores proveedor, @PathVariable Long id){
-        return proveedoresService.actualizarProveedor(proveedor,id);
+    private ResponseEntity<?> editarProveedor(@RequestBody Proveedores proveedor, @PathVariable Long id) {
+        return proveedoresService.actualizarProveedor(proveedor, id);
     }
 
     @DeleteMapping("borrar_proveedor/{id}")
-    private ResponseEntity<?>borrarProveedor(@PathVariable Long id){
+    private ResponseEntity<?> borrarProveedor(@PathVariable Long id) {
         return proveedoresService.borrarProveedor(id);
     }
 }

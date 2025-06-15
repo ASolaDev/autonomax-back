@@ -18,8 +18,6 @@ public class UsuariosService {
     @Autowired
     private UsuariosRepository usuariosRepository;
 
-    
-
     // Obtener todos los usuarios
     public List<Usuarios> obtenerTodosLosUsuarios() {
         return this.usuariosRepository.findAll();

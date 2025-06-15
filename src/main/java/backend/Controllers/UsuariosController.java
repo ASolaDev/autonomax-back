@@ -42,7 +42,7 @@ public class UsuariosController {
     @PostMapping("login")
     @Operation(summary = "Loguear un usuario", description = "A partir de un email y una contraseña devuelve una respuesta afirmativa o negativa")
     public ResponseEntity<?> Login(@RequestBody LoginRequest loginRequest, HttpSession httpSession) {
-        return usuariosService.Login(loginRequest.getNombreUsuario(), loginRequest.getPassword(),httpSession);
+        return usuariosService.Login(loginRequest.getNombreUsuario(), loginRequest.getPassword(), httpSession);
     }
 
     @PutMapping("usuario/{id}")
@@ -60,9 +60,11 @@ public class UsuariosController {
     @PostMapping("/logout")
     public ResponseEntity<?> logout(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
+
         if (session != null) {
             session.invalidate(); // Invalida la sesión del servidor
         }
+
         return ResponseEntity.ok().body("Sesión cerrada");
     }
 

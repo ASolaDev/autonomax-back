@@ -16,34 +16,27 @@ public class CategoriaGastosController {
     private CategoriaGastosService categoriaGastosService;
 
     @GetMapping("categorias")
-    private List<CategoriaGastos> obtenerTodos()
-    {
+    private List<CategoriaGastos> obtenerTodos() {
         return this.categoriaGastosService.obtenerTodos();
     }
 
     @GetMapping("categoria/{id}")
-    private CategoriaGastos obtenerID(@PathVariable Long id)
-    {
+    private CategoriaGastos obtenerID(@PathVariable Long id) {
         return this.categoriaGastosService.obtenerCategoria(id);
     }
 
     @PostMapping("nueva_categoria")
-    private ResponseEntity<?> crearNueva(@RequestBody CategoriaGastos categoriaGastos)
-    {
+    private ResponseEntity<?> crearNueva(@RequestBody CategoriaGastos categoriaGastos) {
         return this.categoriaGastosService.crearCategoria(categoriaGastos);
     }
 
-
     @PutMapping("categoria/{id}")
-    private ResponseEntity<?> actualizarCategoria(@PathVariable Long id,@RequestBody CategoriaGastos categoriaGastos)
-    {
-        return this.categoriaGastosService.actualizarCategoria(id,categoriaGastos);
+    private ResponseEntity<?> actualizarCategoria(@PathVariable Long id, @RequestBody CategoriaGastos categoriaGastos) {
+        return this.categoriaGastosService.actualizarCategoria(id, categoriaGastos);
     }
 
-
     @DeleteMapping("categoria/{id}")
-    private ResponseEntity<?> borrarCategoria(@PathVariable Long id)
-    {
+    private ResponseEntity<?> borrarCategoria(@PathVariable Long id) {
         return this.categoriaGastosService.borrarCategoria(id);
     }
 }
