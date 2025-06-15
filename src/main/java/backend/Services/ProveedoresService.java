@@ -1,6 +1,5 @@
 package backend.Services;
 
-import backend.Entity.Clientes;
 import backend.Entity.Proveedores;
 import backend.Entity.TipoProveedor;
 import backend.Repository.ProveedoresRepository;
@@ -79,6 +78,7 @@ public class ProveedoresService {
     public ResponseEntity<?> borrarProveedor(Long id){
         Proveedores proveedorEncontrado = obtenerPorId(id);
         if(proveedorEncontrado != null){
+            proveedorEncontrado.getGastos().clear();
             proveedoresRepository.delete(proveedorEncontrado);
             return new ResponseEntity<>("Proveedor borrado",HttpStatus.OK);
         }
@@ -130,7 +130,7 @@ public class ProveedoresService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("La provincia no puede estar vacío");
         }
 
-        if (!proveedor.getTipoProveedor().equals(TipoProveedor.Empresa) && !proveedor.getTipoProveedor().equals(TipoProveedor.Autónomo)) {
+        if (!proveedor.getTipoProveedor().equals(TipoProveedor.Empresa) && !proveedor.getTipoProveedor().equals(TipoProveedor.Autonomo)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El tipo debe ser Empresa o Autónomo");
         }
 

@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import java.util.ArrayList;
 import java.util.List;
 
+
 @Entity
 @Data
 @AllArgsConstructor
@@ -46,6 +47,6 @@ public class Proveedores {
     @Column(name = "telefono_proveedor", length = 20, nullable = false)
     private String telefonoProveedor;
 
-//    @OneToMany(mappedBy = "proveedor", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<Facturas> facturas = new ArrayList<>();
+    @OneToMany(mappedBy = "proveedor", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Gastos> gastos = new ArrayList<>();
 }
