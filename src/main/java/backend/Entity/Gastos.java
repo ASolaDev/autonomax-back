@@ -1,18 +1,21 @@
 package backend.Entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.sql.Date;
+import java.util.Date;
 
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+
 @Table(name = "gastos")
 public class Gastos {
     @Id
@@ -41,7 +44,12 @@ public class Gastos {
     @Column(name = "metodo_pago", nullable = false)
     private MetodoPago metodoPago;
 
-    @Column(name = "proveedor", nullable = false, length = 100)
-    private String proveedor;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "idProveedor")
+    private Proveedores proveedor;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "idFactura")
+    private Facturas factura;
 
 }
