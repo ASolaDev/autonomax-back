@@ -14,24 +14,28 @@ import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+        @Bean
+        public PasswordEncoder passwordEncoder() {
+                return new BCryptPasswordEncoder();
+        }
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, HandlerMappingIntrospector introspector)
-            throws Exception {
-        http
-                .csrf(csrf -> csrf.disable()) // Desactivar CSRF para APIs
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("autonomax/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                        .anyRequest().authenticated())
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // Sin sesiones
-                );
+        @Bean
+        public SecurityFilterChain securityFilterChain(HttpSecurity http, HandlerMappingIntrospector introspector)
+                        throws Exception {
+                http
+                                .csrf(csrf -> csrf.disable()) // Desactivar CSRF para APIs
+                                .authorizeHttpRequests(auth -> auth
+                                                .requestMatchers("autonomax/**", "autonomax/logout",
+                                                                "/swagger-ui/**", "/v3/api-docs/**")
+                                                .permitAll()
+                                                .anyRequest().authenticated())
+                                .sessionManagement(session -> session
+                                                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED) // Sin
+                                                                                                          // sesiones
+                                )
+                                .formLogin(form -> form.disable()) // desactiva formulario por defecto
+                                .httpBasic(basic -> basic.disable()); // deactiva autenticación básica
 
-        return http.build();
-    }
-
+                return http.build();
+        }
 }
