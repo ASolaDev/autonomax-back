@@ -33,16 +33,16 @@ public class ClientesController {
         return clientesService.crearCliente(cliente);
     }
 
+    @PutMapping("cliente/{id}")
+    @Operation(summary = "Actualizar un cliente por ID", description = "Actualiza un cliente dado un ID")
+    public ResponseEntity<?> actualizarCliente(@PathVariable Long id, @RequestBody Clientes cliente) {
+        return clientesService.actualizarCliente(cliente, id);
+    }
+
     @DeleteMapping("cliente/{id}")
     @Operation(summary = "Borrar un cliente por ID", description = "Borra un cliente dado un ID")
     public void eliminarCliente(@PathVariable Long id) {
         clientesService.eliminarCliente(id);
-    }
-
-    @PutMapping("cliente/{id}")
-    @Operation(summary = "Actualizar un cliente por ID", description = "Actualiza un cliente dado un ID")
-    public ResponseEntity<?> eliminarCliente(@PathVariable Long id, @RequestBody Clientes cliente) {
-        return clientesService.actualizarCliente(cliente, id);
     }
 
 }

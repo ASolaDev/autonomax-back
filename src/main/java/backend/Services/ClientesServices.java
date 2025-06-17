@@ -62,11 +62,16 @@ public class ClientesServices {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El teléfono no puede estar vacío");
             }
 
+            if (Boolean.FALSE.equals(cliente.getTipoCliente())) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Debes seleccionar un tipo de cliente");
+            }
+
             clienteEncontrado.setCifCliente(cliente.getCifCliente());
             clienteEncontrado.setNombreCliente(cliente.getNombreCliente());
             clienteEncontrado.setDireccionCliente(cliente.getDireccionCliente());
             clienteEncontrado.setEmailCliente(cliente.getEmailCliente());
             clienteEncontrado.setTelefonoCliente(cliente.getTelefonoCliente());
+            clienteEncontrado.setTipoCliente(cliente.getTipoCliente());
 
             clientesRepository.save(clienteEncontrado);
             return ResponseEntity.ok(clienteEncontrado);
