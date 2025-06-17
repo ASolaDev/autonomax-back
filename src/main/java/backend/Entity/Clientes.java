@@ -41,7 +41,7 @@ public class Clientes {
     private String telefonoCliente;
 
     @Column(name = "tipo_cliente", length = 20, nullable = false)
-    private Clientes tipoCliente;
+    private TipoCliente tipoCliente;
 
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Facturas> facturas = new ArrayList<>();
