@@ -40,6 +40,12 @@ public class Clientes {
     @Column(name = "telefono_cliente", length = 20, nullable = false)
     private String telefonoCliente;
 
+    @Column(name = "ciudad_cliente", length = 20, nullable = false)
+    private String ciudadCliente;
+
+    @Column(name = "provincia_cliente", length = 20, nullable = false)
+    private String provinciaCliente;
+
     @Column(name = "tipo_cliente", length = 20, nullable = false)
     private TipoCliente tipoCliente;
 
