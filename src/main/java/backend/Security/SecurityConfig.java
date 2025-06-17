@@ -25,7 +25,7 @@ public class SecurityConfig {
                 http
                                 .csrf(csrf -> csrf.disable()) // Desactivar CSRF para APIs
                                 .authorizeHttpRequests(auth -> auth
-                                                .requestMatchers("autonomax/**", "autonomax/logout",
+                                                .requestMatchers("autonomax/login", "autonomax/logout",
                                                                 "/swagger-ui/**", "/v3/api-docs/**")
                                                 .permitAll()
                                                 .anyRequest().authenticated())
