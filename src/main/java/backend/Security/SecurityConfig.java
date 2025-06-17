@@ -22,10 +22,11 @@ public class SecurityConfig {
         @Bean
         public SecurityFilterChain securityFilterChain(HttpSecurity http, HandlerMappingIntrospector introspector)
                         throws Exception {
+                final String DIRECCION_ANGULAR = "http:localhost:4200";
                 http
                                 .csrf(csrf -> csrf.disable()) // Desactivar CSRF para APIs
                                 .authorizeHttpRequests(auth -> auth
-                                                .requestMatchers("autonomax/login", "autonomax/logout",
+                                                .requestMatchers("autonomax/**",DIRECCION_ANGULAR,
                                                                 "/swagger-ui/**", "/v3/api-docs/**")
                                                 .permitAll()
                                                 .anyRequest().authenticated())
