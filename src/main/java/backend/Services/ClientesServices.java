@@ -50,9 +50,9 @@ public class ClientesServices {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El CIF no puede estar vacío");
             }
 
-            if (!comprobarCif(cliente.getCifCliente(), true, cliente.getId())) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El CIF esta ya registrado");
-            }
+//            if (!comprobarCif(cliente.getCifCliente(), true, cliente.getId())) {
+//                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El CIF esta ya registrado");
+//            }
 
             if (cliente.getDireccionCliente().trim().isEmpty()) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("La dirección no puede estar vacía");
