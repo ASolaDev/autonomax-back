@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import backend.Entity.Usuarios;
@@ -18,9 +17,6 @@ import jakarta.persistence.EntityNotFoundException;
 public class UsuariosService {
     @Autowired
     private UsuariosRepository usuariosRepository;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
     // Obtener todos los usuarios
     public List<Usuarios> obtenerTodosLosUsuarios() {
@@ -43,14 +39,14 @@ public class UsuariosService {
                 return validacionResultado;
             }
 
-            usuEncontrado.setNombre_usuario(usuario.getNombre_usuario());
+            usuEncontrado.setNombreUsuario(usuario.getNombreUsuario());
             usuEncontrado.setEmail(usuario.getEmail());
             usuEncontrado.setPassword(hashearPass(usuario.getPassword()));
             usuEncontrado.setRol(usuario.getRol());
 
             Usuarios usuarioGuardado = usuariosRepository.save(usuEncontrado);
 
-            return ResponseEntity.status(HttpStatus.CREATED).body("Usuario actualizado!");
+            return ResponseEntity.status(HttpStatus.CREATED).body(usuarioGuardado);
         } else {
             return null;
         }
@@ -70,7 +66,7 @@ public class UsuariosService {
 
         Usuarios usuarioGuardado = usuariosRepository.save(usuario);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body("Usuario creado");
+        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioGuardado);
     }
 
     // Borrar un usuario
@@ -99,7 +95,7 @@ public class UsuariosService {
                 // se genera automáticamente una cookie (JSESSIONID)
                 httpSession.setAttribute("idUsuario", usuEncontrado.getId());
                 httpSession.setAttribute("emailUsuario", usuEncontrado.getEmail());
-                httpSession.setAttribute("nombreUsuario", usuEncontrado.getNombre_usuario());
+                httpSession.setAttribute("nombreUsuario", usuEncontrado.getNombreUsuario());
                 httpSession.setAttribute("rolUsuario", usuEncontrado.getRol());
                 return new ResponseEntity<>(usuEncontrado, HttpStatus.OK);
             } else
@@ -138,7 +134,7 @@ public class UsuariosService {
     // Metodo para validar al Usuario (sea si se ha encontrado o no, para no repetir
     // código en put/post
     private ResponseEntity<?> validarUsuario(Usuarios usuario, boolean usuario_editar, Long id) {
-        if (usuario.getNombre_usuario().trim().length() < 3) {
+        if (usuario.getNombreUsuario().trim().length() < 3) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body("El nombre no cumple con la longitud suficiente (minimo 3)");
         }
@@ -158,7 +154,7 @@ public class UsuariosService {
                     .body("El email ya está registrado.");
         }
 
-        if (comprobarNombreUsuario(usuario.getNombre_usuario(), usuario_editar, id)) {
+        if (comprobarNombreUsuario(usuario.getNombreUsuario(), usuario_editar, id)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body("El nombre de usuario ya está registrado.");
         }

@@ -20,7 +20,7 @@ import java.math.BigDecimal;
 public class DetalleFactura {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_detalle;
+    private Long idDetalle;
 
     private String descripcion;
     private Integer cantidad;

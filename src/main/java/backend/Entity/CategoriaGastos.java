@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class CategoriaGastos {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_categoria;
+    private Long idCategoria;
 
     @Column(name = "categoria", length = 100, nullable = false)
     private String categoria;

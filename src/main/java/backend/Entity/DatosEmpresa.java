@@ -22,19 +22,19 @@ public class DatosEmpresa {
     private Long id;
 
     @Column(name = "nombre_empresa", length = 100, nullable = false)
-    private String nombre_empresa;
+    private String nombreEmpresa;
 
     @Column(name = "cif_empresa", length = 20, nullable = false)
-    private String cif_empresa;
+    private String cifEmpresa;
 
     @Column(name = "direccion_empresa", nullable = false)
-    private String direccion_empresa;
+    private String direccionEmpresa;
 
     @Column(name = "email_empresa", length = 100, nullable = false)
-    private String email_empresa;
+    private String emailEmpresa;
 
     @Column(name = "telefono_empresa", length = 20, nullable = false)
-    private String telefono_empresa;
+    private String telefonoEmpresa;
 
     @OneToMany(mappedBy = "empresa", cascade = CascadeType.ALL, orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)

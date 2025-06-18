@@ -26,19 +26,28 @@ public class Clientes {
     private Long id;
 
     @Column(name = "nombre_cliente", length = 100, nullable = false)
-    private String nombre_cliente;
+    private String nombreCliente;
 
     @Column(name = "cif_cliente", length = 20, nullable = false, unique = true)
-    private String cif_cliente;
+    private String cifCliente;
 
     @Column(name = "direccion_cliente", nullable = false)
-    private String direccion_cliente;
+    private String direccionCliente;
 
     @Column(name = "email_cliente", length = 100, nullable = false)
-    private String email_cliente;
+    private String emailCliente;
 
     @Column(name = "telefono_cliente", length = 20, nullable = false)
-    private String telefono_cliente;
+    private String telefonoCliente;
+
+    @Column(name = "ciudad_cliente", length = 20, nullable = false)
+    private String ciudadCliente;
+
+    @Column(name = "provincia_cliente", length = 20, nullable = false)
+    private String provinciaCliente;
+
+    @Column(name = "tipo_cliente", length = 20, nullable = false)
+    private TipoCliente tipoCliente;
 
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Facturas> facturas = new ArrayList<>();
