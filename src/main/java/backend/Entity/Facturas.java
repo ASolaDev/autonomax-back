@@ -77,7 +77,6 @@ public class Facturas {
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_cliente")
-    @JsonIgnore
     private Clientes cliente;
 
 }
