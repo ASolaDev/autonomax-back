@@ -64,6 +64,7 @@ public class FacturasService {
 
     public ResponseEntity<?> crearFactura(@RequestBody FacturaDetallesDTO facturaJson) {
 
+        System.out.println("Creando factura: " + facturaJson);
         if (facturaJson.getNumeroFactura() == null || facturaJson.getNumeroFactura().trim().isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No hay un número de factura");
         }
@@ -88,10 +89,6 @@ public class FacturasService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("La empresa no existe");
         }
 
-        if (!facturaJson.getIva().equals(new BigDecimal(21.00)) && !facturaJson.getIva().equals(new BigDecimal(10.00))
-                && !facturaJson.getIva().equals(new BigDecimal(4.00))) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("IVA tiene que ser 21, 10 o 4");
-        }
 
         if (facturaJson.getFacturasDetalles().size() <= 0) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se han incluido detalles en la factura");

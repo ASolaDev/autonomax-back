@@ -42,7 +42,7 @@ public class FacturasController {
     }
 
     @DeleteMapping("borrar_factura/{id}")
-    public ResponseEntity<?> crearFactura(@PathVariable Long id) {
+    public ResponseEntity<?> borrarFactura(@PathVariable Long id) {
         return facturasService.borrarFactura(id);
     }
 }
