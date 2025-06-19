@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import backend.Entity.Clientes;
 import backend.Entity.DetalleFactura;
 import backend.Entity.Estado;
 import lombok.AllArgsConstructor;
@@ -30,6 +31,8 @@ public class FacturaDetallesDTO {
     private Estado estado;
 
     private List<DetalleFactura> facturasDetalles = new ArrayList<>();
+
+    private Clientes cliente;
 
     // Datos que necesito en las relaciones
     private Long idCliente;
