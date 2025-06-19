@@ -14,5 +14,4 @@ public interface DetalleFacturaRepository extends JpaRepository<DetalleFactura, 
     @Query("FROM DetalleFactura f WHERE f.factura = :factura")
     List<DetalleFactura> borrarDetallesFacturaPorIdFactura(@Param("factura") Long factura);
 
-
 }

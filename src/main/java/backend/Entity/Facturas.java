@@ -30,7 +30,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 
 @Table(name = "facturas")
 public class Facturas {
@@ -77,7 +77,6 @@ public class Facturas {
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_cliente")
-    @JsonIgnore
     private Clientes cliente;
 
 }

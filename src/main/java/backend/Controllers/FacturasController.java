@@ -17,8 +17,8 @@ public class FacturasController {
     private FacturasService facturasService;
 
     @GetMapping("facturas")
-    public List<Facturas> obtenerFacturas() {
-        return facturasService.obtenerTodas();
+    public List<Facturas> obtenerFacturasPorIdUsuario(@RequestParam Long idUsuario) {
+        return facturasService.obtenerFacturasPorUsuario(idUsuario);
     }
 
     @GetMapping("factura/{id}")

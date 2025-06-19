@@ -32,8 +32,8 @@ public class FacturaDetallesDTO {
     private List<DetalleFactura> facturasDetalles = new ArrayList<>();
 
     // Datos que necesito en las relaciones
-    private String cifCliente;
-    private String emailUsuario;
-    private String nombreEmpresa;
+    private Long idCliente;
+    private Long idUsuario;
+    private Long idEmpresa;
 
 }

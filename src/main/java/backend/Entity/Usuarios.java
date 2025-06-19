@@ -23,7 +23,7 @@ import org.hibernate.annotations.OnDeleteAction;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 
 public class Usuarios {
     @Id
@@ -36,13 +36,12 @@ public class Usuarios {
     @Column(name = "email", nullable = false)
     private String email;
 
-
     @Column(name = "password", nullable = false)
     private String password;
 
     @Column(name = "rol")
     @Enumerated(EnumType.STRING)
-    private Rol rol = Rol.Usuario; // Ponemos por defecto el rol de Usuario al crear un usuario
+    private Rol rol = Rol.Usuario;
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
