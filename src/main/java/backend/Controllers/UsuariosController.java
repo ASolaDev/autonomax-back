@@ -62,7 +62,7 @@ public class UsuariosController {
         HttpSession session = request.getSession(false);
 
         if (session != null) {
-            session.invalidate(); // Invalida la sesión del servidor
+            session.invalidate();
         }
 
         return ResponseEntity.ok().body("Sesión cerrada");

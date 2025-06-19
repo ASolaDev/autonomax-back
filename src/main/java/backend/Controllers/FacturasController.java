@@ -16,7 +16,6 @@ public class FacturasController {
     @Autowired
     private FacturasService facturasService;
 
-
     @GetMapping("facturas")
     public List<Facturas> obtenerFacturasPorIdUsuario(@RequestParam Long idUsuario) {
         return facturasService.obtenerFacturasPorUsuario(idUsuario);
