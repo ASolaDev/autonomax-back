@@ -3,6 +3,7 @@ package backend.Services;
 import java.math.BigDecimal;
 import java.util.List;
 
+import backend.DTOS.EditarFacturaDetallesDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -117,24 +118,16 @@ public class FacturasService {
         }
     }
 
-    public ResponseEntity<?> actualizarFactura(Long id, FacturaDetallesDTO facturaJson) {
+    public ResponseEntity<?> actualizarFactura(Long id, EditarFacturaDetallesDTO facturaJson) {
+        System.out.println(facturaJson);
         if (facturaJson.getNumeroFactura() == null || facturaJson.getNumeroFactura().trim().isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No hay un número de factura");
         }
 
-        Usuarios usuEncontrado = usuariosRepository.findById(facturaJson.getIdUsuario()).orElse(null);
-        if (usuEncontrado == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El usuario no existe");
-        }
 
-        Clientes clienteEncontrado = clientesRepository.findById(facturaJson.getIdCliente()).orElse(null);
+        Clientes clienteEncontrado = clientesRepository.findById(facturaJson.getCliente().getId()).orElse(null);
         if (clienteEncontrado == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El cliente no existe");
-        }
-
-        DatosEmpresa empresaEncontrada = datosEmpresaRepository.findById(facturaJson.getIdEmpresa()).orElse(null);
-        if (empresaEncontrada == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("La empresa no existe");
         }
 
         Facturas facturaEncontrada = buscarFacturaPorId(id);
@@ -143,15 +136,12 @@ public class FacturasService {
                     .body("La factura " + facturaJson.getNumeroFactura() + " no existe");
         }
 
-        if (!facturaJson.getIva().equals(new BigDecimal(21.00)) && !facturaJson.getIva().equals(new BigDecimal(10.00))
-                && !facturaJson.getIva().equals(new BigDecimal(4.00))) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("IVA tiene que ser 21, 10 o 4");
-        }
+        System.out.println("hola");
+
 
         if (facturaJson.getFacturasDetalles().size() <= 0) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se han incluido detalles en la factura");
         }
-
         facturaEncontrada.setEstado(facturaJson.getEstado());
         facturaEncontrada.setFechaEmision(facturaJson.getFechaEmision());
         facturaEncontrada.setIva(facturaJson.getIva());
@@ -159,10 +149,9 @@ public class FacturasService {
         facturaEncontrada.setFechaPago(facturaJson.getFechaPago());
         facturaEncontrada.setTotal(facturaJson.getTotal());
         facturaEncontrada.setCliente(clienteEncontrado);
-        facturaEncontrada.setUsuario(usuEncontrado);
-        facturaEncontrada.setEmpresa(empresaEncontrada);
 
         facturasRepository.save(facturaEncontrada);
+
 
         detalleFacturaService.crearDetalleFactura(facturaJson.getFacturasDetalles(), facturaEncontrada);
 
@@ -176,7 +165,7 @@ public class FacturasService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("La factura no se ha encontrado");
         } else {
             facturasRepository.delete(factura);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Factura eliminada");
+            return ResponseEntity.status(HttpStatus.OK).body("Factura eliminada");
         }
 
     }
