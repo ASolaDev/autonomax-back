@@ -81,18 +81,14 @@ public class UsuariosService {
     }
 
     public ResponseEntity<?> Login(String nombreUsuario, String password, HttpSession httpSession) {
-        Usuarios usuEncontrado = usuariosRepository.ComprobarUsuarioPorNombreUsuario(nombreUsuario);
 
-        System.out.println("Nombre usuario:" + nombreUsuario + "Contraseña:" + password);
+        Usuarios usuEncontrado = usuariosRepository.ComprobarUsuarioPorNombreUsuario(nombreUsuario);
 
         if (usuEncontrado != null) {
             // Comprobamos la contraseña hasheada con plana (la que mete el usuario)
             BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
             if (encoder.matches(password.trim(), usuEncontrado.getPassword())) {
-
-                // Guardamos la sesión en back (HTTPSESSION), en consecuencia
-                // se genera automáticamente una cookie (JSESSIONID)
                 httpSession.setAttribute("idUsuario", usuEncontrado.getId());
                 httpSession.setAttribute("emailUsuario", usuEncontrado.getEmail());
                 httpSession.setAttribute("nombreUsuario", usuEncontrado.getNombreUsuario());
@@ -105,14 +101,13 @@ public class UsuariosService {
         }
     }
 
-    // Método para validar el formato del email
     private boolean esEmailValido(String email) {
         String EMAIL_REGEX = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
         return email.matches(EMAIL_REGEX);
     }
 
-    // Método para comprobar si el email ya está registrado
     private boolean comprobarEmail(String email, boolean usuario_editar, Long id) {
+
         if (usuario_editar) {
             Usuarios usuarioExistente = usuariosRepository.ComprobarUsuarioPorEmail(email);
             return (usuarioExistente != null && !usuarioExistente.getId().equals(id));
@@ -121,8 +116,8 @@ public class UsuariosService {
         return usuariosRepository.ComprobarUsuarioPorEmail(email) != null;
     }
 
-    // Método para comprobar si el nombre de usuario ya está registrado
     private boolean comprobarNombreUsuario(String nombreUsuario, boolean usuario_editar, Long id) {
+
         if (usuario_editar) {
             Usuarios usuarioExistente = usuariosRepository.ComprobarUsuarioPorNombreUsuario(nombreUsuario);
             return (usuarioExistente != null && !usuarioExistente.getId().equals(id));
@@ -131,9 +126,8 @@ public class UsuariosService {
         return usuariosRepository.ComprobarUsuarioPorNombreUsuario(nombreUsuario) != null;
     }
 
-    // Metodo para validar al Usuario (sea si se ha encontrado o no, para no repetir
-    // código en put/post
     private ResponseEntity<?> validarUsuario(Usuarios usuario, boolean usuario_editar, Long id) {
+
         if (usuario.getNombreUsuario().trim().length() < 3) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body("El nombre no cumple con la longitud suficiente (minimo 3)");
@@ -162,8 +156,8 @@ public class UsuariosService {
         return null;
     }
 
-    // Metodo para hashear la contraseña en BD
     public String hashearPass(String clave) {
+
         if (!clave.isEmpty()) {
             BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
             return encoder.encode(clave);

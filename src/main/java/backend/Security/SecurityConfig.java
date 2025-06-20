@@ -24,18 +24,16 @@ public class SecurityConfig {
                         throws Exception {
                 final String DIRECCION_ANGULAR = "http:localhost:4200";
                 http
-                                .csrf(csrf -> csrf.disable()) // Desactivar CSRF para APIs
+                                .csrf(csrf -> csrf.disable())
                                 .authorizeHttpRequests(auth -> auth
                                                 .requestMatchers("autonomax/**", DIRECCION_ANGULAR,
                                                                 "/swagger-ui/**", "/v3/api-docs/**")
                                                 .permitAll()
                                                 .anyRequest().authenticated())
                                 .sessionManagement(session -> session
-                                                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED) // Sin
-                                                                                                          // sesiones
-                                )
-                                .formLogin(form -> form.disable()) // desactiva formulario por defecto
-                                .httpBasic(basic -> basic.disable()); // deactiva autenticación básica
+                                                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
+                                .formLogin(form -> form.disable())
+                                .httpBasic(basic -> basic.disable());
 
                 return http.build();
         }

@@ -9,6 +9,7 @@ import backend.Entity.DatosEmpresa;
 
 @Repository
 public interface DatosEmpresaRepository extends JpaRepository<DatosEmpresa, Long> {
+
     @Query("FROM DatosEmpresa c WHERE c.nombreEmpresa = :nombreEmpresa")
     DatosEmpresa ComprobarEmpresaPorNombre(@Param("nombreEmpresa") String nombreEmpresa);
 }
