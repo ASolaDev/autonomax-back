@@ -16,18 +16,19 @@ public class ProveedoresService {
     @Autowired
     private ProveedoresRepository proveedoresRepository;
 
-
-    public List<Proveedores> obtenerTodos(){
+    public List<Proveedores> obtenerTodos() {
         return this.proveedoresRepository.findAll();
     }
 
-    public Proveedores obtenerPorId(Long id){
+    public Proveedores obtenerPorId(Long id) {
         return this.proveedoresRepository.findById(id).orElse(null);
     }
 
-    public ResponseEntity<?> crearProveedor(Proveedores proveedor){
-        if(proveedoresRepository.ComprobarProveedorPorCIF(proveedor.getCifProveedor()) == null){
-            if(!validarProveedor(proveedor,false,null).getStatusCode().isError()){
+    public ResponseEntity<?> crearProveedor(Proveedores proveedor) {
+        if (proveedoresRepository.ComprobarProveedorPorCIF(proveedor.getCifProveedor()) == null) {
+
+            if (!validarProveedor(proveedor, false, null).getStatusCode().isError()) {
+
                 Proveedores proveedorNuevo = new Proveedores();
                 proveedorNuevo.setNombreProveedor(proveedor.getNombreProveedor().trim());
                 proveedorNuevo.setCifProveedor(proveedor.getCifProveedor());
@@ -38,19 +39,18 @@ public class ProveedoresService {
                 proveedorNuevo.setProvinciaProveedor(proveedor.getProvinciaProveedor().trim());
                 proveedorNuevo.setTipoProveedor(proveedor.getTipoProveedor());
                 proveedoresRepository.save(proveedorNuevo);
-                return new ResponseEntity<>(proveedorNuevo,HttpStatus.OK);
+                return new ResponseEntity<>(proveedorNuevo, HttpStatus.OK);
 
+            } else {
+                return validarProveedor(proveedor, false, null);
             }
-            else{
-               return validarProveedor(proveedor,false,null);
-            }
-        }
-        else{
+        } else {
             return new ResponseEntity<>("Proveedor ya existe", HttpStatus.BAD_REQUEST);
         }
     }
 
     public ResponseEntity<?> actualizarProveedor(Proveedores proveedor, Long id) {
+
         Proveedores proveedorEncontrado = obtenerPorId(id);
 
         if (proveedorEncontrado == null) {
@@ -75,22 +75,23 @@ public class ProveedoresService {
         return new ResponseEntity<>(proveedorEncontrado, HttpStatus.OK);
     }
 
-    public ResponseEntity<?> borrarProveedor(Long id){
+    public ResponseEntity<?> borrarProveedor(Long id) {
+
         Proveedores proveedorEncontrado = obtenerPorId(id);
-        if(proveedorEncontrado != null){
+
+        if (proveedorEncontrado != null) {
             proveedorEncontrado.getGastos().clear();
             proveedoresRepository.delete(proveedorEncontrado);
-            return new ResponseEntity<>("Proveedor borrado",HttpStatus.OK);
-        }
-        else{
-            return new ResponseEntity<>("Proveedor no existe",HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Proveedor borrado", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Proveedor no existe", HttpStatus.BAD_REQUEST);
         }
     }
 
     // ********** Métodos auxiliares *********************
 
+    public ResponseEntity<?> validarProveedor(Proveedores proveedor, Boolean proveedorEditar, Long idProveedor) {
 
-    public ResponseEntity<?> validarProveedor(Proveedores proveedor, Boolean proveedorEditar, Long idProveedor){
         if (!esEmailValido(proveedor.getEmailProveedor())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El formato del email no es válido");
         }
@@ -104,15 +105,14 @@ public class ProveedoresService {
         }
 
         if (!proveedorEditar) {
-            if(comprobarCif(proveedor.getCifProveedor(), false, null)){
+            if (comprobarCif(proveedor.getCifProveedor(), false, null)) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El CIF ya está registrado");
             }
-            if(comprobarEmailProveedor(proveedor.getEmailProveedor(), false,null)){
+
+            if (comprobarEmailProveedor(proveedor.getEmailProveedor(), false, null)) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El email esta duplicado");
             }
         }
-
-
 
         if (proveedor.getDireccionProveedor().trim().isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("La dirección no puede estar vacía");
@@ -130,19 +130,21 @@ public class ProveedoresService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("La provincia no puede estar vacío");
         }
 
-        if (!proveedor.getTipoProveedor().equals(TipoProveedor.Empresa) && !proveedor.getTipoProveedor().equals(TipoProveedor.Autonomo)) {
+        if (!proveedor.getTipoProveedor().equals(TipoProveedor.Empresa)
+                && !proveedor.getTipoProveedor().equals(TipoProveedor.Autonomo)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El tipo debe ser Empresa o Autónomo");
         }
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
-    
+
     private boolean esEmailValido(String email) {
         String EMAIL_REGEX = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
         return email.matches(EMAIL_REGEX);
     }
 
     private boolean comprobarCif(String cif, boolean proveedor_editar, Long id) {
+
         if (proveedor_editar) {
             Proveedores proveedorExistente = proveedoresRepository.ComprobarProveedorPorCIF(cif);
             return (proveedorExistente != null && !proveedorExistente.getId().equals(id));
@@ -152,6 +154,7 @@ public class ProveedoresService {
     }
 
     private boolean comprobarEmailProveedor(String email, boolean proveedor_editar, Long id) {
+
         if (proveedor_editar) {
             Proveedores proveedorExistente = proveedoresRepository.ComprobarProveedorPorEmail(email);
             return (proveedorExistente != null && !proveedorExistente.getId().equals(id));
@@ -160,5 +163,4 @@ public class ProveedoresService {
         return proveedoresRepository.ComprobarProveedorPorEmail(email) != null;
     }
 
-    // *****************************************************************
 }

@@ -50,9 +50,10 @@ public class ClientesServices {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El CIF no puede estar vacío");
             }
 
-//            if (!comprobarCif(cliente.getCifCliente(), true, cliente.getId())) {
-//                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El CIF esta ya registrado");
-//            }
+            // if (!comprobarCif(cliente.getCifCliente(), true, cliente.getId())) {
+            // return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El CIF esta ya
+            // registrado");
+            // }
 
             if (cliente.getDireccionCliente().trim().isEmpty()) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("La dirección no puede estar vacía");
@@ -73,7 +74,7 @@ public class ClientesServices {
             if (Boolean.FALSE.equals(cliente.getTipoCliente())) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Debes seleccionar un tipo de cliente");
             }
-            System.out.println(cliente);
+
             clienteEncontrado.setCifCliente(cliente.getCifCliente());
             clienteEncontrado.setNombreCliente(cliente.getNombreCliente());
             clienteEncontrado.setDireccionCliente(cliente.getDireccionCliente());
@@ -98,7 +99,7 @@ public class ClientesServices {
         Clientes clienteEncontrado = clientesRepository.ComprobarClientePorCIF(cliente.getCifCliente());
 
         if (clienteEncontrado == null) {
-            System.out.println(cliente);
+
             if (!esEmailValido(cliente.getEmailCliente()))
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El formato del email no es válido");
 

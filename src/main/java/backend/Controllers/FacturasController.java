@@ -1,5 +1,6 @@
 package backend.Controllers;
 
+import backend.DTOS.EditarFacturaDetallesDTO;
 import backend.DTOS.FacturaDetallesDTO;
 import backend.Entity.Facturas;
 import backend.Services.FacturasService;
@@ -37,8 +38,8 @@ public class FacturasController {
     }
 
     @PutMapping("editar_factura/{id}")
-    public ResponseEntity<?> editarFactura(@PathVariable Long id, @RequestBody FacturaDetallesDTO facturaDetallesDTO) {
-        return facturasService.actualizarFactura(id, facturaDetallesDTO);
+    public ResponseEntity<?> editarFactura(@PathVariable Long id, @RequestBody EditarFacturaDetallesDTO editarFacturaDetallesDTO) {
+        return facturasService.actualizarFactura(id, editarFacturaDetallesDTO);
     }
 
     @DeleteMapping("borrar_factura/{id}")

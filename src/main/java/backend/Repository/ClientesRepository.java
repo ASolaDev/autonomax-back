@@ -14,5 +14,4 @@ public interface ClientesRepository extends JpaRepository<Clientes, Long> {
 
     @Query("FROM Clientes c WHERE c.emailCliente = :email")
     Clientes ComprobarClientePorEmail(@Param("email") String email);
-
 }

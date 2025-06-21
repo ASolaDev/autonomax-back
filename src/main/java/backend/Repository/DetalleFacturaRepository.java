@@ -11,6 +11,7 @@ import java.util.List;
 
 @Repository
 public interface DetalleFacturaRepository extends JpaRepository<DetalleFactura, Long> {
+
     @Query("FROM DetalleFactura f WHERE f.factura = :factura")
     List<DetalleFactura> borrarDetallesFacturaPorIdFactura(@Param("factura") Long factura);
 
