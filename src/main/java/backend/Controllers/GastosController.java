@@ -18,13 +18,14 @@ public class GastosController {
 
     /**
      * @return List<Gastos>
-     * @description Método para obtener todos los gastos.
-     *              Este método devuelve una lista de todos los gastos.
+     * @description Método para obtener todos los gastos de un determinado usuario.
+     *              Este método devuelve una lista de todos los gastos de ese usuario.
      */
     @GetMapping("gastos")
-    private List<Gastos> obtenerTodos() {
-        return gastosService.obtenerTodos();
+    private List<Gastos> obtenerTodosPorIdUsuario(@RequestParam Long idUsuario) {
+        return gastosService.obtenerTodosPorIdUsuario(idUsuario);
     }
+
 
     /**
      * @param id de tipo Long

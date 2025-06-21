@@ -49,6 +49,12 @@ public class FacturasController {
         return facturasService.encontrarFacturaPorNumeroFactura(numeroFactura);
     }
 
+    // FacturasController.java
+    @GetMapping("facturas/libres")
+    public List<Facturas> obtenerFacturasNoAsignadasAGastos(@RequestParam Long idUsuario) {
+        return facturasService.obtenerFacturasNoAsignadasAGastos(idUsuario);
+    }
+
     /**
      * @param idUsuario de tipo Long
      * @return List<Facturas>

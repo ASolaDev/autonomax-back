@@ -1,5 +1,6 @@
 package backend.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -47,5 +48,6 @@ public class Proveedores {
     private String telefonoProveedor;
 
     @OneToMany(mappedBy = "proveedor", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<Gastos> gastos = new ArrayList<>();
 }

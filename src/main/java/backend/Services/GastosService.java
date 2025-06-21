@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -30,6 +31,10 @@ public class GastosService {
 
     public List<Gastos> obtenerTodos() {
         return gastosRepository.findAll();
+    }
+
+    public List<Gastos>obtenerTodosPorIdUsuario(@RequestParam Long idUsuario){
+        return gastosRepository.ObtenerGastosPorIdUsuario(idUsuario);
     }
 
     public Gastos obtenerPorId(Long id) {

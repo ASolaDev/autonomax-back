@@ -38,13 +38,11 @@ public class Gastos {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "idCategoria")
-    @JsonIgnore
     private CategoriaGastos categoria;
 
     @Column(name = "metodo_pago", nullable = false)
     private MetodoPago metodoPago;
 
-    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "idProveedor")
     private Proveedores proveedor;

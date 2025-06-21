@@ -15,4 +15,8 @@ public interface FacturasRepository extends JpaRepository<Facturas, Long> {
     @Query("FROM Facturas u WHERE u.usuario.id = :id_usuario")
     List<Facturas> ObtenerFacturasPorIdUsuario(@Param("id_usuario") Long id_usuario);
 
+    // FacturasRepository.java
+    @Query("SELECT f FROM Facturas f WHERE f.usuario.id = :id_usuario AND f.id NOT IN (SELECT g.factura.id FROM Gastos g WHERE g.factura IS NOT NULL)")
+    List<Facturas> ObtenerFacturasNoAsignadasAGastos(@Param("id_usuario") Long id_usuario);
+
 }

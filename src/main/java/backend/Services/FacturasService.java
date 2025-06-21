@@ -208,4 +208,9 @@ public class FacturasService {
 
     }
 
+    // FacturasService.java
+    public List<Facturas> obtenerFacturasNoAsignadasAGastos(Long idUsuario) {
+        return facturasRepository.ObtenerFacturasNoAsignadasAGastos(idUsuario);
+    }
+
 }
