@@ -15,17 +15,31 @@ public class ClientesServices {
     @Autowired
     private ClientesRepository clientesRepository;
 
-    // Obtener todos los clientes
+    /**
+     * @description Método para obtener todos los clientes.
+     *              Este método devuelve una lista de todos los clientes.
+     * @return List<Clientes> Lista de clientes.
+     */
     public List<Clientes> obtenerTodos() {
         return clientesRepository.findAll();
     }
 
-    // Devolver un cliente dado su id
+    /**
+     * @param id de tipo Long
+     * @return Clientes
+     * @description Método para obtener un cliente por su ID.
+     *              Si no se encuentra, devuelve null.
+     */
     public Clientes obtenerPorId(Long id) {
         return clientesRepository.findById(id).orElse(null);
     }
 
-    // Eliminar a un cliente
+    /**
+     * @param id de tipo Long
+     * @return ResponseEntity<?>
+     * @description Método para eliminar un cliente por su ID.
+     *              Si el cliente no existe, no hace nada.
+     */
     public void eliminarCliente(Long id) {
         Clientes clienteEncontrado = obtenerPorId(id);
 
@@ -33,7 +47,13 @@ public class ClientesServices {
             clientesRepository.delete(clienteEncontrado);
     }
 
-    // Actualizar a un cliente
+    /**
+     * @param cliente de tipo Clientes
+     * @param id      de tipo Long
+     * @return ResponseEntity<?>
+     * @description Método para actualizar un cliente.
+     *              Si el cliente no existe, devuelve un mensaje de error.
+     */
     public ResponseEntity<?> actualizarCliente(Clientes cliente, Long id) {
         Clientes clienteEncontrado = obtenerPorId(id);
 
@@ -94,7 +114,12 @@ public class ClientesServices {
 
     }
 
-    // Crear a un cliente
+    /**
+     * @param cliente de tipo Clientes
+     * @return ResponseEntity<?>
+     * @description Método para crear un nuevo cliente.
+     *              Si el cliente ya existe, devuelve un mensaje de error.
+     */
     public ResponseEntity<?> crearCliente(Clientes cliente) {
         Clientes clienteEncontrado = clientesRepository.ComprobarClientePorCIF(cliente.getCifCliente());
 
@@ -120,12 +145,25 @@ public class ClientesServices {
         }
     }
 
+    /**
+     * @param email de tipo String
+     * @return boolean
+     * @description Método para validar el formato de un email.
+     *              Utiliza una expresión regular para comprobar si el email es
+     *              válido.
+     */
     private boolean esEmailValido(String email) {
         String EMAIL_REGEX = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
         return email.matches(EMAIL_REGEX);
     }
 
-    // Método para comprobar si el CIF ya está registrado
+    /**
+     * @param cif de tipo String
+     * @return boolean
+     * @description Método para validar el formato de un CIF.
+     *              Utiliza una expresión regular para comprobar si el CIF es
+     *              válido.
+     */
     private boolean comprobarCif(String cif, boolean usuario_editar, Long id) {
         if (usuario_editar) {
             Clientes clienteExistente = clientesRepository.ComprobarClientePorCIF(cif);
@@ -135,6 +173,16 @@ public class ClientesServices {
         return clientesRepository.ComprobarClientePorCIF(cif) != null;
     }
 
+    /**
+     * @param email          de tipo String
+     * @param usuario_editar de tipo boolean
+     * @param id             de tipo Long
+     * @return boolean
+     * @description Método para comprobar si un email ya está registrado.
+     *              Si el usuario está editando, comprueba que el email no
+     *              pertenezca
+     *              a otro cliente.
+     */
     private boolean comprobarEmailCliente(String email, boolean usuario_editar, Long id) {
         if (usuario_editar) {
             Clientes clienteExistente = clientesRepository.ComprobarClientePorEmail(email);

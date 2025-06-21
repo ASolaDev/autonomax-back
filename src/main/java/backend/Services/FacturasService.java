@@ -1,15 +1,14 @@
 package backend.Services;
 
-import java.math.BigDecimal;
 import java.util.List;
 
-import backend.DTOS.EditarFacturaDetallesDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import backend.DTOS.EditarFacturaDetallesDTO;
 import backend.DTOS.FacturaDetallesDTO;
 import backend.Entity.Clientes;
 import backend.Entity.DatosEmpresa;
@@ -41,10 +40,22 @@ public class FacturasService {
     @Autowired
     private DetalleFacturaService detalleFacturaService;
 
+    /**
+     * @param numeroFactura de tipo String
+     * @return Facturas
+     * @description Método para encontrar una factura por su número de factura.
+     *              Si no se encuentra, devuelve null.
+     */
     public Facturas encontrarFacturaPorNumeroFactura(String numeroFactura) {
         return facturasRepository.ObtenerFacturaPorNumeroFactura(numeroFactura);
     }
 
+    /**
+     * @param idUsuario de tipo Long
+     * @return List<Facturas>
+     * @description Método para obtener todas las facturas de un usuario por su ID.
+     *              Si el usuario no existe, devuelve null.
+     */
     public List<Facturas> obtenerFacturasPorUsuario(Long idUsuario) {
 
         if (usuariosService.obtenerUsuarioPorID(idUsuario) != null) {
@@ -55,14 +66,31 @@ public class FacturasService {
 
     }
 
+    /**
+     * @return List<Facturas>
+     * @description Método para obtener todas las facturas.
+     */
     public List<Facturas> obtenerTodas() {
         return facturasRepository.findAll();
     }
 
+    /**
+     * @param id de tipo Long
+     * @return Facturas
+     * @description Método para buscar una factura por su ID. Si no se encuentra,
+     *              devuelve null.
+     */
     public Facturas buscarFacturaPorId(Long id) {
         return facturasRepository.findById(id).orElse(null);
     }
 
+    /**
+     * @param facturaJson de tipo FacturaDetallesDTO
+     * @return ResponseEntity<?>
+     * @description Método para crear una nueva factura. Si el número de factura ya
+     *              existe, devuelve un mensaje de error. Si el usuario, cliente o
+     *              empresa no existen, devuelve un mensaje de error.
+     */
     public ResponseEntity<?> crearFactura(@RequestBody FacturaDetallesDTO facturaJson) {
 
         if (facturaJson.getNumeroFactura() == null || facturaJson.getNumeroFactura().trim().isEmpty()) {
@@ -118,12 +146,18 @@ public class FacturasService {
         }
     }
 
+    /**
+     * @param id          de tipo Long
+     * @param facturaJson de tipo EditarFacturaDetallesDTO
+     * @return ResponseEntity<?>
+     * @description Método para actualizar una factura por su ID. Si la factura no
+     *              existe, devuelve un mensaje de error.
+     */
     public ResponseEntity<?> actualizarFactura(Long id, EditarFacturaDetallesDTO facturaJson) {
         System.out.println(facturaJson);
         if (facturaJson.getNumeroFactura() == null || facturaJson.getNumeroFactura().trim().isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No hay un número de factura");
         }
-
 
         Clientes clienteEncontrado = clientesRepository.findById(facturaJson.getCliente().getId()).orElse(null);
         if (clienteEncontrado == null) {
@@ -138,7 +172,6 @@ public class FacturasService {
 
         System.out.println("hola");
 
-
         if (facturaJson.getFacturasDetalles().size() <= 0) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se han incluido detalles en la factura");
         }
@@ -152,12 +185,17 @@ public class FacturasService {
 
         facturasRepository.save(facturaEncontrada);
 
-
         detalleFacturaService.crearDetalleFactura(facturaJson.getFacturasDetalles(), facturaEncontrada);
 
         return ResponseEntity.status(HttpStatus.CREATED).body("Factura actualizada");
     }
 
+    /**
+     * @param id de tipo Long
+     * @return ResponseEntity<?>
+     * @description Método para borrar una factura por su ID. Si la factura no
+     *              existe, devuelve un mensaje de error.
+     */
     public ResponseEntity<?> borrarFactura(Long id) {
         Facturas factura = facturasRepository.findById(id).orElse(null);
 
