@@ -15,9 +15,16 @@ public class DetalleFacturaService {
     @Autowired
     private DetalleFacturaRepository detalleFacturaRepository;
 
+    /**
+     * @param detalles de tipo List<DetalleFactura>
+     * @param factura  de tipo Facturas
+     * @return ResponseEntity<?>
+     * @description Método para crear los detalles de una factura.
+     *              Asocia cada detalle a la factura correspondiente.
+     */
     public ResponseEntity<?> crearDetalleFactura(List<DetalleFactura> detalles, Facturas factura) {
 
-        //factura.getFacturasDetalles().clear();
+        // factura.getFacturasDetalles().clear();
         for (DetalleFactura detalle : detalles) {
             System.out.println(detalle.getDescripcion());
             detalle.setFactura(factura);

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -28,14 +29,41 @@ public class GastosService {
     @Autowired
     private CategoriaGastosService categoriaGastosService;
 
+    /**
+     * Obtener todos los gastos
+     * 
+     * @return lista de gastos
+     */
     public List<Gastos> obtenerTodos() {
         return gastosRepository.findAll();
     }
 
+    /**
+     * Obtener todos los gastos por ID de usuario
+     * 
+     * @param idUsuario ID del usuario
+     * @return lista de gastos del usuario
+     */
+    public List<Gastos> obtenerTodosPorIdUsuario(@RequestParam Long idUsuario) {
+        return gastosRepository.ObtenerGastosPorIdUsuario(idUsuario);
+    }
+
+    /**
+     * Obtener un gasto por ID
+     * 
+     * @param id ID del gasto
+     * @return gasto encontrado o null si no existe
+     */
     public Gastos obtenerPorId(Long id) {
         return gastosRepository.findById(id).orElse(null);
     }
 
+    /**
+     * Crear un nuevo gasto
+     * 
+     * @param gastosDTO DTO con los datos del gasto
+     * @return ResponseEntity con el resultado de la operación
+     */
     public ResponseEntity<?> crearGasto(GastosDTO gastosDTO) {
 
         Usuarios usuarioEncontrado = usuariosService.obtenerUsuarioPorID(gastosDTO.getUsuario());
@@ -63,8 +91,6 @@ public class GastosService {
             return new ResponseEntity<>("La categoría no se ha encontrado", HttpStatus.BAD_REQUEST);
 
         }
-
-        // Validaciones
 
         if (gastosDTO.getDescripcion().trim().isEmpty()) {
             return new ResponseEntity<>("Descripción vacía", HttpStatus.BAD_REQUEST);
@@ -104,6 +130,12 @@ public class GastosService {
         return new ResponseEntity<>("Gasto guardado", HttpStatus.OK);
     }
 
+    /**
+     * Borrar un gasto por ID
+     * 
+     * @param id ID del gasto
+     * @return ResponseEntity con el resultado de la operación
+     */
     public ResponseEntity<?> borrarGasto(Long id) {
         Gastos gastoEncontrado = obtenerPorId(id);
         if (gastoEncontrado != null) {
@@ -114,6 +146,13 @@ public class GastosService {
         }
     }
 
+    /**
+     * Actualizar un gasto por ID
+     * 
+     * @param gastosDTO DTO con los datos del gasto
+     * @param id        ID del gasto a actualizar
+     * @return ResponseEntity con el resultado de la operación
+     */
     public ResponseEntity<?> actualizarGasto(GastosDTO gastosDTO, Long id) {
 
         Gastos gastoEncontrado = obtenerPorId(id);

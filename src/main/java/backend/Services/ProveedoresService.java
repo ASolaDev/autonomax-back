@@ -16,14 +16,31 @@ public class ProveedoresService {
     @Autowired
     private ProveedoresRepository proveedoresRepository;
 
+    /**
+     * @description Método para obtener todos los proveedores.
+     *              Este método devuelve una lista de todos los proveedores.
+     * @return List<Proveedores> Lista de proveedores.
+     */
     public List<Proveedores> obtenerTodos() {
         return this.proveedoresRepository.findAll();
     }
 
+    /**
+     * @param id de tipo Long
+     * @return Proveedores
+     * @description Método para obtener un proveedor por su ID.
+     *              Si no se encuentra, devuelve null.
+     */
     public Proveedores obtenerPorId(Long id) {
         return this.proveedoresRepository.findById(id).orElse(null);
     }
 
+    /**
+     * @param id de tipo Long
+     * @return ResponseEntity<?>
+     * @description Método para eliminar un proveedor por su ID.
+     *              Si el proveedor no existe, devuelve un mensaje de error.
+     */
     public ResponseEntity<?> crearProveedor(Proveedores proveedor) {
         if (proveedoresRepository.ComprobarProveedorPorCIF(proveedor.getCifProveedor()) == null) {
 
@@ -49,6 +66,13 @@ public class ProveedoresService {
         }
     }
 
+    /**
+     * @param proveedor de tipo Proveedores
+     * @param id        de tipo Long
+     * @return ResponseEntity<?>
+     * @description Método para actualizar un proveedor.
+     *              Si el proveedor no existe, devuelve un mensaje de error.
+     */
     public ResponseEntity<?> actualizarProveedor(Proveedores proveedor, Long id) {
 
         Proveedores proveedorEncontrado = obtenerPorId(id);
@@ -75,6 +99,12 @@ public class ProveedoresService {
         return new ResponseEntity<>(proveedorEncontrado, HttpStatus.OK);
     }
 
+    /**
+     * @param id de tipo Long
+     * @return ResponseEntity<?>
+     * @description Método para eliminar un proveedor por su ID.
+     *              Si el proveedor no existe, devuelve un mensaje de error.
+     */
     public ResponseEntity<?> borrarProveedor(Long id) {
 
         Proveedores proveedorEncontrado = obtenerPorId(id);
@@ -88,8 +118,15 @@ public class ProveedoresService {
         }
     }
 
-    // ********** Métodos auxiliares *********************
-
+    /**
+     * @param proveedor       de tipo Proveedores
+     * @param proveedorEditar de tipo Boolean
+     * @param idProveedor     de tipo Long
+     * @return ResponseEntity<?>
+     * @description Método para validar los datos de un proveedor.
+     *              Comprueba que el email, nombre, CIF, dirección, teléfono,
+     *              ciudad, provincia y tipo sean válidos.
+     */
     public ResponseEntity<?> validarProveedor(Proveedores proveedor, Boolean proveedorEditar, Long idProveedor) {
 
         if (!esEmailValido(proveedor.getEmailProveedor())) {
@@ -138,11 +175,23 @@ public class ProveedoresService {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    /**
+     * @param email de tipo String
+     * @return boolean
+     * @description Método para validar el formato de un email.
+     *              Utiliza una expresión regular para comprobar el formato.
+     */
     private boolean esEmailValido(String email) {
         String EMAIL_REGEX = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
         return email.matches(EMAIL_REGEX);
     }
 
+    /**
+     * @param cif de tipo String
+     * @return boolean
+     * @description Método para validar el formato de un CIF.
+     *              Utiliza una expresión regular para comprobar el formato.
+     */
     private boolean comprobarCif(String cif, boolean proveedor_editar, Long id) {
 
         if (proveedor_editar) {
@@ -153,6 +202,15 @@ public class ProveedoresService {
         return proveedoresRepository.ComprobarProveedorPorCIF(cif) != null;
     }
 
+    /**
+     * @param email            de tipo String
+     * @param proveedor_editar de tipo boolean
+     * @param id               de tipo Long
+     * @return boolean
+     * @description Método para comprobar si un email ya está registrado.
+     *              Si el proveedor está siendo editado, comprueba que el email no
+     *              pertenezca a otro proveedor.
+     */
     private boolean comprobarEmailProveedor(String email, boolean proveedor_editar, Long id) {
 
         if (proveedor_editar) {

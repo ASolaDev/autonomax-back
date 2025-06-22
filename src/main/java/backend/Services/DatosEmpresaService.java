@@ -10,6 +10,10 @@ public class DatosEmpresaService {
     @Autowired
     private DatosEmpresaRepository datosEmpresaRepository;
 
+    /**
+     * @return List<DatosEmpresa>
+     * @description Método para obtener todos los datos de la empresa.
+     */
     public DatosEmpresa obtenerPorId(Long id) {
         return datosEmpresaRepository.findById(id).orElse(null);
     }

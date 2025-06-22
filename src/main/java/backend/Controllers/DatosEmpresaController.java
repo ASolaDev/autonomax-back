@@ -14,8 +14,11 @@ public class DatosEmpresaController {
     @Autowired
     private DatosEmpresaService datosEmpresaService;
 
-    // Método para devolver todos los datos de la empresa, en principio se necesita
-    // todo
+    /**
+     * @return DatosEmpresa
+     * @description Método para obtener los datos de la empresa.
+     *              Este método devuelve los datos de la empresa.
+     */
     @GetMapping("empresa/{id}")
     private DatosEmpresa obtenerPorId(@PathVariable Long id) {
         return datosEmpresaService.obtenerPorId(id);

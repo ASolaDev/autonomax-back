@@ -15,14 +15,30 @@ public class CategoriaGastosService {
     @Autowired
     private CategoriaGastosRepository categoriaGastosRepository;
 
+    /**
+     * @return List<CategoriaGastos>
+     * @description Método para obtener todas las categorías de gastos.
+     */
     public List<CategoriaGastos> obtenerTodos() {
         return categoriaGastosRepository.findAll();
     }
 
+    /**
+     * @param id de tipo Long
+     * @return CategoriaGastos
+     * @description Método para obtener una categoría de gastos por su ID.
+     *              Si no se encuentra, devuelve null.
+     */
     public CategoriaGastos obtenerCategoria(Long id) {
         return this.categoriaGastosRepository.findById(id).orElse(null);
     }
 
+    /**
+     * @param categoriaGastos de tipo CategoriaGastos
+     * @return ResponseEntity<?>
+     * @description Método para crear una nueva categoría de gastos.
+     *              Si la categoría ya existe, devuelve un mensaje de error.
+     */
     public ResponseEntity<?> crearCategoria(CategoriaGastos categoriaGastos) {
         CategoriaGastos categoriaEncontrada = categoriaGastosRepository
                 .ComprobarCategoriaPorNombre(categoriaGastos.getCategoria());
@@ -35,6 +51,13 @@ public class CategoriaGastosService {
         }
     }
 
+    /**
+     * @param id              de tipo Long
+     * @param categoriaGastos de tipo CategoriaGastos
+     * @return ResponseEntity<?>
+     * @description Método para actualizar una categoría de gastos.
+     *              Si la categoría no existe, devuelve un mensaje de error.
+     */
     public ResponseEntity<?> actualizarCategoria(Long id, CategoriaGastos categoriaGastos) {
         CategoriaGastos categoriaEncontrada = obtenerCategoria(id);
 
@@ -48,6 +71,12 @@ public class CategoriaGastosService {
         }
     }
 
+    /**
+     * @param id de tipo Long
+     * @return ResponseEntity<?>
+     * @description Método para eliminar una categoría de gastos.
+     *              Si la categoría no existe, devuelve un mensaje de error.
+     */
     public ResponseEntity<?> borrarCategoria(Long id) {
         CategoriaGastos categoriaEncontrada = obtenerCategoria(id);
 

@@ -21,42 +21,83 @@ public class UsuariosController {
     @Autowired
     private UsuariosService usuariosService;
 
+    /**
+     * @return List<Usuarios>
+     * @description Método para obtener todos los usuarios.
+     *              Este método devuelve una lista de todos los usuarios.
+     */
     @GetMapping("usuarios")
     @Operation(summary = "Devolver todos los usuarios", description = "Devuelve todos los usuarios")
     public List<Usuarios> ObtenerTodosLosUsuarios() {
         return usuariosService.obtenerTodosLosUsuarios();
     }
 
+    /**
+     * @param id de tipo Long
+     * @return Usuarios
+     * @description Método para obtener un usuario por su ID.
+     *              Si no se encuentra, devuelve null.
+     */
     @GetMapping("usuario/{id}")
     @Operation(summary = "Obtener un usuario", description = "Dado un id, devuelve un el usuario, en caso contrario no devuelve nada")
     public Usuarios obtenerUsuarioPorID(@PathVariable Long id) {
         return usuariosService.obtenerUsuarioPorID(id);
     }
 
+    /**
+     * @param email de tipo String
+     * @return Usuarios
+     * @description Método para obtener un usuario por su email.
+     *              Si no se encuentra, devuelve null.
+     */
     @PostMapping("nuevo_usuario")
     @Operation(summary = "Registrar un nuevo usuario", description = "Crea un nuevo usuario validando el email, el nombre y la contraseña. Devuelve el usuario creado si todo es correcto.")
     public ResponseEntity<?> crearNuevoUsuario(@RequestBody Usuarios usuario) {
         return usuariosService.crearUsuario(usuario);
     }
 
+    /**
+     * @param loginRequest de tipo LoginRequest
+     * @return ResponseEntity<?>
+     * @description Método para loguear un usuario.
+     *              A partir de un email y una contraseña devuelve una respuesta
+     *              afirmativa o negativa.
+     */
     @PostMapping("login")
     @Operation(summary = "Loguear un usuario", description = "A partir de un email y una contraseña devuelve una respuesta afirmativa o negativa")
     public ResponseEntity<?> Login(@RequestBody LoginRequest loginRequest, HttpSession httpSession) {
         return usuariosService.Login(loginRequest.getNombreUsuario(), loginRequest.getPassword(), httpSession);
     }
 
+    /**
+     * @param id de tipo Long
+     * @return ResponseEntity<?>
+     * @description Método para actualizar un usuario.
+     *              Si el usuario no existe, devuelve un mensaje de error.
+     */
     @PutMapping("usuario/{id}")
     @Operation(summary = "Actualizar un usuario", description = "Actualiza al usuario mediante un id y un objeto Usuario (obligatorio esto para actualizar)")
     public ResponseEntity<?> actualizarUsuario(@PathVariable Long id, @RequestBody Usuarios usuario) {
         return usuariosService.actualizarUsuario(id, usuario);
     }
 
+    /**
+     * @param id de tipo Long
+     * @description Método para eliminar un usuario por su ID.
+     *              Si el usuario no existe, no hace nada.
+     */
     @DeleteMapping("usuario/{id}")
     @Operation(summary = "Eliminar un usuario", description = "Elimina al usuario de la base de datos, si no lo encuentra no hace nada")
     public void BorrarUsuarios(@PathVariable Long id) {
         usuariosService.eliminarUsuario(id);
     }
 
+    /**
+     * @param request de tipo HttpServletRequest
+     * @return ResponseEntity<?>
+     * @description Método para cerrar sesión.
+     *              Invalida la sesión actual y devuelve un mensaje de éxito.
+     */
     @PostMapping("/logout")
     public ResponseEntity<?> logout(HttpServletRequest request) {
         HttpSession session = request.getSession(false);

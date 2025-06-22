@@ -18,17 +18,31 @@ public class UsuariosService {
     @Autowired
     private UsuariosRepository usuariosRepository;
 
-    // Obtener todos los usuarios
+    /**
+     * @description Método para obtener todos los usuarios.
+     *              Este método devuelve una lista de todos los usuarios.
+     * @return List<Usuarios> Lista de usuarios.
+     */
     public List<Usuarios> obtenerTodosLosUsuarios() {
         return this.usuariosRepository.findAll();
     }
 
-    // Obtener un usuario por su ID
+    /**
+     * @param id de tipo Long
+     * @return Usuarios
+     * @description Método para obtener un usuario por su ID.
+     *              Si no se encuentra, devuelve null.
+     */
     public Usuarios obtenerUsuarioPorID(Long id) {
         return this.usuariosRepository.findById(id).orElse(null);
     }
 
-    // Actualizar un usuario
+    /**
+     * @param id de tipo Long
+     * @return ResponseEntity<?>
+     * @description Método para eliminar un usuario por su ID.
+     *              Si el usuario no existe, devuelve un mensaje de error.
+     */
     public ResponseEntity<?> actualizarUsuario(Long id, Usuarios usuario) {
         Usuarios usuEncontrado = obtenerUsuarioPorID(id);
 
@@ -52,7 +66,12 @@ public class UsuariosService {
         }
     }
 
-    // Crear un nuevo usuario
+    /**
+     * @param usuario de tipo Usuarios
+     * @return ResponseEntity<?>
+     * @description Método para crear un nuevo usuario.
+     *              Si el usuario ya existe, devuelve un mensaje de error.
+     */
     public ResponseEntity<?> crearUsuario(Usuarios usuario) {
         // Para posteriores mejoras, creamos validaciones de nombre y contraseñas con
         // REGEX
@@ -69,7 +88,11 @@ public class UsuariosService {
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioGuardado);
     }
 
-    // Borrar un usuario
+    /**
+     * @param id de tipo Long
+     * @description Método para eliminar un usuario por su ID.
+     *              Si el usuario no existe, lanza una excepción.
+     */
     public void eliminarUsuario(Long id) {
         Usuarios usuario_encontrado = obtenerUsuarioPorID(id);
 
@@ -80,6 +103,14 @@ public class UsuariosService {
         }
     }
 
+    /**
+     * @param nombreUsuario de tipo String
+     * @param password      de tipo String
+     * @param httpSession   de tipo HttpSession
+     * @return ResponseEntity<?>
+     * @description Método para iniciar sesión.
+     *              Comprueba si el usuario existe y si la contraseña es correcta.
+     */
     public ResponseEntity<?> Login(String nombreUsuario, String password, HttpSession httpSession) {
 
         Usuarios usuEncontrado = usuariosRepository.ComprobarUsuarioPorNombreUsuario(nombreUsuario);
@@ -101,11 +132,27 @@ public class UsuariosService {
         }
     }
 
+    /**
+     * @param email de tipo String
+     * @return boolean
+     * @description Método para validar el formato de un email.
+     *              Utiliza una expresión regular para comprobar si el email es
+     *              válido.
+     */
     private boolean esEmailValido(String email) {
         String EMAIL_REGEX = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
         return email.matches(EMAIL_REGEX);
     }
 
+    /**
+     * @param email          de tipo String
+     * @param usuario_editar de tipo boolean
+     * @param id             de tipo Long
+     * @return boolean
+     * @description Método para comprobar si un email ya está registrado.
+     *              Si el usuario está editando, comprueba que el email no
+     *              pertenezca a otro usuario.
+     */
     private boolean comprobarEmail(String email, boolean usuario_editar, Long id) {
 
         if (usuario_editar) {
@@ -116,6 +163,16 @@ public class UsuariosService {
         return usuariosRepository.ComprobarUsuarioPorEmail(email) != null;
     }
 
+    /**
+     * @param nombreUsuario  de tipo String
+     * @param usuario_editar de tipo boolean
+     * @param id             de tipo Long
+     * @return boolean
+     * @description Método para comprobar si un nombre de usuario ya está
+     *              registrado.
+     *              Si el usuario está editando, comprueba que el nombre de usuario
+     *              no pertenezca a otro usuario.
+     */
     private boolean comprobarNombreUsuario(String nombreUsuario, boolean usuario_editar, Long id) {
 
         if (usuario_editar) {
@@ -126,6 +183,15 @@ public class UsuariosService {
         return usuariosRepository.ComprobarUsuarioPorNombreUsuario(nombreUsuario) != null;
     }
 
+    /**
+     * @param usuario        de tipo Usuarios
+     * @param usuario_editar de tipo boolean
+     * @param id             de tipo Long
+     * @return ResponseEntity<?>
+     * @description Método para validar un usuario.
+     *              Comprueba que el nombre, la contraseña y el email cumplan con
+     *              los requisitos.
+     */
     private ResponseEntity<?> validarUsuario(Usuarios usuario, boolean usuario_editar, Long id) {
 
         if (usuario.getNombreUsuario().trim().length() < 3) {
@@ -156,6 +222,12 @@ public class UsuariosService {
         return null;
     }
 
+    /**
+     * @param clave de tipo String
+     * @return String
+     * @description Método para hashear una contraseña utilizando BCrypt.
+     *              Si la contraseña está vacía, devuelve la contraseña sin cambios.
+     */
     public String hashearPass(String clave) {
 
         if (!clave.isEmpty()) {
