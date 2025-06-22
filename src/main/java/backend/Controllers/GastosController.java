@@ -56,7 +56,7 @@ public class GastosController {
      * @description Método para actualizar un gasto.
      *              Si el gasto no existe, devuelve un mensaje de error.
      */
-    @PutMapping("actualizar_gasto/{id}")
+    @PutMapping("editar_gasto/{id}")
     private ResponseEntity<?> actualizarGasto(@RequestBody GastosDTO gastosDTO, @PathVariable Long id) {
         return gastosService.actualizarGasto(gastosDTO, id);
     }

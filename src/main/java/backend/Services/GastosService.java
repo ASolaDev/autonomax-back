@@ -190,11 +190,12 @@ public class GastosService {
             gastoEncontrado.setMonto(gastosDTO.getMonto());
             gastoEncontrado.setMetodoPago(gastosDTO.getMetodoPago());
             gastoEncontrado.setFactura(facturaEncontrada);
+            gastoEncontrado.setProveedor(proveedorEncontrado);
             gastoEncontrado.setUsuario(usuarioEncontrado);
             gastoEncontrado.setCategoria(categoriaGastos);
             gastosRepository.save(gastoEncontrado);
 
-            return new ResponseEntity<>(gastoEncontrado, HttpStatus.OK);
+            return new ResponseEntity<>("Gasto guardado!", HttpStatus.OK);
 
         } else {
             return new ResponseEntity<>("Gasto no existe", HttpStatus.BAD_REQUEST);
